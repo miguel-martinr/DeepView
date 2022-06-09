@@ -31,12 +31,12 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'django.contrib.admin', # Gives us an admin interface
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
+    'django.contrib.messages', # Used for one-time messages to the user 
     'django.contrib.staticfiles',
+    'deepcom',
 ]
 
 MIDDLEWARE = [

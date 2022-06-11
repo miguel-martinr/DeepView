@@ -1,7 +1,10 @@
-from django.urls import path
+from django.urls import include, path
 from . import views
 
-# URLConf
+
 urlpatterns = [
-    path('hello/', views.say_hello),
+    path('', views.say_hello),
+    path('processed-video/', views.processed_video),
 ]
+
+

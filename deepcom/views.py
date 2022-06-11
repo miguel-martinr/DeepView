@@ -1,12 +1,14 @@
 
-from this import s
+
+
 from django.http import HttpResponse
 from django.shortcuts import render
-from bson.json_util import dumps
+
 
 from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
+from deepcom.controllers.processed_video.get import get_processed_video_controller
 
 from deepcom.models import ParticleData, ProcessedVideo
 from .serializers import UserSerializer, GroupSerializer
@@ -31,13 +33,12 @@ class GroupViewSet(viewsets.ModelViewSet):
 
 
 def processed_video(request):
-    # data = [
-    #   {"cirlce": [(0.0, 0.0), 3.2], "area": 5.0},
-    #   {"cirlce": [(0.0, 0.0), 3.2], "area": 5.0},
-    # ]
+  if request.method == 'GET':
+    return get_processed_video_controller(request)
+  else:
+    return HttpResponse(status=404)
 
-    data = ProcessedVideo.objects.mongo_find()
-    return HttpResponse(dumps(data), content_type='application/json')
+    
 
 
 def say_hello(request):

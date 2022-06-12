@@ -26,11 +26,11 @@
         },
         "deepviewcore": {
             "hashes": [
-                "sha256:4a85c2cc92cb6c5d05a2d94489fe6893f22697c36a0d92641b2b87121c004263",
-                "sha256:dca2ba41d935b741252ed521413a057050f522db84ccca24c5fb08f846d7709e"
+                "sha256:d21a5b21984850a5d3045fe79be3e643eb0572aca4be1baac5c816edf8cca070",
+                "sha256:d9da2e2aebe172c05c4bcfe44901243eb7dae89fa1e5ba7878aeb0c2b8800bdf"
             ],
             "index": "pypi",
-            "version": "==0.1.1"
+            "version": "==0.1.2"
         },
         "django": {
             "hashes": [

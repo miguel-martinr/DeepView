@@ -4,12 +4,10 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
-django-debug-toolbar = "*"
-djangorestframework = "*"
 djongo = "*"
 pymongo = "==3.12.1"
-deepviewcore = "*"
+deepviewcore = {path = "C:/Users/migue/Documents/U/4to/TFG/DeepViewCore/dist/deepviewcore-0.1.2.tar.gz"}
+django = "==3.1.12"
 
 [dev-packages]
 autopep8 = "*"

@@ -8,12 +8,12 @@ class VideoService:
     def __init__(self):
         pass
 
-    def validate_video_file(filename):
+    def validateVideoFile(filename):
         videos_path = DeepcomConfig.videos_path
         return os.path.isfile(os.path.join(videos_path, filename)) and \
             filename.endswith(DeepcomConfig.allowed_extensions)
 
-    def get_available_videos():
+    def getAvailableVideos():
         """Gets available videos stats from the videos folder.
         Each video stats is a dictionary with the following keys:
          - name: video name
@@ -25,7 +25,7 @@ class VideoService:
 
         videos_names = []
         for filename in os.listdir(DeepcomConfig.videos_path):
-            if VideoService.validate_video_file(filename):
+            if VideoService.validateVideoFile(filename):
                 videos_names.append(filename)
 
         videos_stats = []

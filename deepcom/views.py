@@ -9,6 +9,7 @@ from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from rest_framework import permissions
 from deepcom.controllers.processed_video.get import get_processed_video_controller
+from deepcom.controllers.videos.get import get_available_videos_controller
 
 from deepcom.models import ParticleData, ProcessedVideo
 from .serializers import UserSerializer, GroupSerializer
@@ -31,18 +32,28 @@ class GroupViewSet(viewsets.ModelViewSet):
     serializer_class = GroupSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+# Hello
+def say_hello(request):
 
+    return render(request, 'hello.html', {
+        'name': 'Miguel',
+    })
+
+
+# Processed video
 def processed_video(request):
   if request.method == 'GET':
     return get_processed_video_controller(request)
   else:
     return HttpResponse(status=404)
 
+
+# Videos
+def available_videos(request):
+  if request.method == 'GET':
+    return get_available_videos_controller(request)
+  else:
+    return HttpResponse(status=404)
     
 
 
-def say_hello(request):
-
-    return render(request, 'hello.html', {
-        'name': 'Miguel',
-    })

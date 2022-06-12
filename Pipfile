@@ -12,6 +12,7 @@ pymongo = "==3.12.1"
 deepviewcore = "*"
 
 [dev-packages]
+autopep8 = "*"
 
 [requires]
 python_version = "3.9"

@@ -36,8 +36,7 @@ class VideoService:
             current_stats = video.getStats()
             del current_stats['path']
             current_stats['name'] = os.path.basename(videopath)
-            current_stats['status'] = 'UNPROCESSED'
-            VideoService.processVideo(videopath)
+            current_stats['status'] = 'UNPROCESSED'            
             videos_stats.append(current_stats)
         return videos_stats
 

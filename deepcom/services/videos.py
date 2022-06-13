@@ -36,7 +36,7 @@ class VideoService:
             current_stats = video.getStats()
             del current_stats['path']
             current_stats['name'] = os.path.basename(videopath)
-            current_stats['status'] = 'UNPROCESSED'            
+            # current_stats['status'] = 'UNPROCESSED'            
             videos_stats.append(current_stats)
         return videos_stats
 
@@ -66,7 +66,11 @@ class VideoService:
             videoModel.save()
           
           videoCore = Video(videoPath)
+          videoModel.status = 'PROCESSING'
+          videoModel.save()
           videoCore.process(action=saveFrameData)
+          videoModel.status = 'PROCESSED'
+          videoModel.save()
           print("Video does not exist")
 
         

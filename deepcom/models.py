@@ -34,6 +34,8 @@ class VideoModel(models.Model):
   _id = models.ObjectIdField()
   created_at = models.DateTimeField(auto_created=True)
   video_path = models.CharField(max_length=255)
+  status = models.CharField(default='UNPROCESSED', max_length=255)
+  
   frames = models.ArrayField(
     model_container=Frame,
     model_form_class=FrameForm,

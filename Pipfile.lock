@@ -26,7 +26,8 @@
         },
         "deepviewcore": {
             "hashes": [
-                "sha256:8186abb0b4806c50cee14640fa36477e630faa810186ae09e08384004f0493cb"
+                "sha256:8186abb0b4806c50cee14640fa36477e630faa810186ae09e08384004f0493cb",
+                "sha256:b5fd1bde018d598ff582bdf007087fc3d44286696917fb86ba8a2f60ed497165"
             ],
             "path": "C:/Users/migue/Documents/U/4to/TFG/DeepViewCore/dist/deepviewcore-0.1.2.tar.gz",
             "version": "==0.1.2"

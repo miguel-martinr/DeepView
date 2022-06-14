@@ -68,7 +68,7 @@ class VideoService:
           videoCore = Video(videoPath)
           videoModel.status = 'PROCESSING'
           videoModel.save()
-          videoCore.process(action=saveFrameData)
+          videoCore.process(showContours=True, action=saveFrameData)
           videoModel.status = 'PROCESSED'
           videoModel.save()
           print("Video does not exist")

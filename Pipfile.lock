@@ -26,8 +26,7 @@
         },
         "deepviewcore": {
             "hashes": [
-                "sha256:8186abb0b4806c50cee14640fa36477e630faa810186ae09e08384004f0493cb",
-                "sha256:b5fd1bde018d598ff582bdf007087fc3d44286696917fb86ba8a2f60ed497165"
+                "sha256:e039fdf3b007e3f330aded7b22fa0dd1bab50af90f839647c2bebf1c2de46f50"
             ],
             "path": "C:/Users/migue/Documents/U/4to/TFG/DeepViewCore/dist/deepviewcore-0.1.2.tar.gz",
             "version": "==0.1.2"
@@ -203,7 +202,7 @@
                 "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b",
                 "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
             "version": "==0.10.2"
         }
     }

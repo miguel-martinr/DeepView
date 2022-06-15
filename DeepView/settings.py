@@ -38,14 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'deepcom',
     'django.contrib.sessions',
-    'debug_toolbar',
-    'rest_framework',
+    # 'debug_toolbar',
+    # 'rest_framework',
     "corsheaders",
 ]
 
 MIDDLEWARE = [
     # Toolbar
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Cors
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',

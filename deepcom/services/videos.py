@@ -3,6 +3,8 @@ import os
 from deepcom.apps import DeepcomConfig
 from deepviewcore.Video import Video
 
+from deepcom.models import VideoModel
+
 
 class VideoService:
     def __init__(self):
@@ -34,6 +36,44 @@ class VideoService:
             current_stats = video.getStats()
             del current_stats['path']
             current_stats['name'] = os.path.basename(videopath)
-            current_stats['status'] = 'UNPROCESSED'
+            # current_stats['status'] = 'UNPROCESSED'            
             videos_stats.append(current_stats)
         return videos_stats
+
+    def processVideo(videoPath):
+        """Processes a video and returns the processed video stats.
+        """
+        if VideoModel.objects.filter(video_path = videoPath):
+          print ("Video exists")
+        else:
+          # Create a new video model
+          videoModel = VideoModel(video_path=videoPath, frames=[])
+          videoModel.save()
+          
+          def getParticleData(object):
+            return {
+              'x': object['circle'][0][0],
+              'y': object['circle'][0][1],
+              'radius': object['circle'][1],
+              'area': object['area'],
+            }
+
+          def saveFrameData(objects):
+            frame = {
+              'particles': [getParticleData(object) for object in objects],
+            }
+            videoModel.frames.append(frame)
+            videoModel.save()
+          
+          videoCore = Video(videoPath)
+          videoModel.status = 'PROCESSING'
+          videoModel.save()
+          videoCore.process(showContours=True, action=saveFrameData)
+          videoModel.status = 'PROCESSED'
+          videoModel.save()
+          print("Video does not exist")
+
+        
+        
+
+        

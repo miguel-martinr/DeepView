@@ -3,34 +3,20 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render
+from deepcom.controllers.process_video.post import process_video_post_controller
 
 
-from django.contrib.auth.models import User, Group
-from rest_framework import viewsets
-from rest_framework import permissions
+
+
 from deepcom.controllers.processed_video.get import get_processed_video_controller
-from deepcom.controllers.videos.get import get_available_videos_controller
+from deepcom.controllers.videos.check_status import check_status_controller
+from deepcom.controllers.videos.get_available import get_available_videos_controller
 
-from deepcom.models import ParticleData, ProcessedVideo
-from .serializers import UserSerializer, GroupSerializer
-
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows users to be viewed or edited.
-    """
-    queryset = User.objects.all().order_by('-date_joined')
-    serializer_class = UserSerializer
-    permission_classes = [permissions.IsAuthenticated]
+from deepcom.models import ParticleData, VideoModel
 
 
-class GroupViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint that allows groups to be viewed or edited.
-    """
-    queryset = Group.objects.all()
-    serializer_class = GroupSerializer
-    permission_classes = [permissions.IsAuthenticated]
+
+
 
 # Hello
 def say_hello(request):
@@ -52,6 +38,17 @@ def processed_video(request):
 def available_videos(request):
   if request.method == 'GET':
     return get_available_videos_controller(request)
+  else:
+    return HttpResponse(status=404)
+
+
+def process_video(request):
+  if request.method == 'POST':
+    return process_video_post_controller(request)
+
+def check_status(request):
+  if request.method == 'GET':
+    return check_status_controller(request)
   else:
     return HttpResponse(status=404)
     

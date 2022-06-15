@@ -1,19 +1,7 @@
-
-
-
 from django.http import HttpResponse
 from django.shortcuts import render
-from deepcom.controllers.process_video.process import process_video_controller
-
-
-
-
 from deepcom.controllers.processed_video.get import get_processed_video_controller
-from deepcom.controllers.videos.get_available import get_available_videos_controller
-
 from deepcom.models import ParticleData, VideoModel
-
-
 
 
 

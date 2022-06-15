@@ -7,7 +7,7 @@ from deepcom.models import VideoModel
 from deepcom.services.videos import VideoService
 
 
-def process_video_post_controller(request: HttpRequest):
+def process_video_controller(request: HttpRequest):
     decoded_body = request.body.decode('utf-8')
     # print(f"#############BODY: {decoded_body}###################")
     json_body = json.loads(decoded_body)

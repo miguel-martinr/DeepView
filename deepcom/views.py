@@ -3,7 +3,7 @@
 
 from django.http import HttpResponse
 from django.shortcuts import render
-from deepcom.controllers.process_video.post import process_video_post_controller
+from deepcom.controllers.process_video.process import process_video_controller
 
 
 
@@ -44,7 +44,7 @@ def available_videos(request):
 
 def process_video(request):
   if request.method == 'POST':
-    return process_video_post_controller(request)
+    return process_video_controller(request)
 
 def check_status(request):
   if request.method == 'GET':

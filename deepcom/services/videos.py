@@ -8,9 +8,9 @@ from deepcom.models import VideoModel
 
 class VideoService:
     processes = {}
+
     def __init__(self):
         pass
-
 
     def validateVideoFile(filename):
         videos_path = DeepcomConfig.videos_path
@@ -24,7 +24,7 @@ class VideoService:
          - size_in_bytes: video size in bytes
          - duration_in_seconds: video duration in seconds
          - fps: video frames per second
-        
+
         """
 
         videos_names = []
@@ -38,52 +38,57 @@ class VideoService:
             current_stats = video.getStats()
             del current_stats['path']
             current_stats['name'] = os.path.basename(videopath)
-            # current_stats['status'] = 'UNPROCESSED'            
+            # current_stats['status'] = 'UNPROCESSED'
             videos_stats.append(current_stats)
         return videos_stats
+
+    def stopProcessing(videoPath):
+        if videoPath in VideoService.processes:
+            video: Video = VideoService.processes[videoPath]
+            video.stop_processing()
+            return True
+            # TODO: check if process is complete
+        else:
+            return False
 
     def processVideo(videoPath):
         """Processes a video and returns the processed video stats.
         """
-        if VideoModel.objects.filter(video_path = videoPath):
-          print ("Video exists")
+        if VideoModel.objects.filter(video_path=videoPath):
+            print("Video exists")
         else:
-          print("Video does not exist")
-          # Create a new video model
-          videoModel = VideoModel(video_path=videoPath, frames=[])
-          videoModel.save()
-          
-          def getParticleData(object):
-            return {
-              'x': object['circle'][0][0],
-              'y': object['circle'][0][1],
-              'radius': object['circle'][1],
-              'area': object['area'],
-            }
-
-          def saveFrameData(objects):
-            frame = {
-              'particles': [getParticleData(object) for object in objects],
-            }
-            videoModel.frames.append(frame)
+            print("Video does not exist")
+            # Create a new video model
+            videoModel = VideoModel(video_path=videoPath, frames=[])
             videoModel.save()
-          
-          videoCore = Video(videoPath)
 
-          def process():
-            videoModel.status = 'PROCESSING'
-            videoModel.save()
-            videoCore.process(action=saveFrameData)
-            del VideoService.processes[videoPath]
-            videoModel.status = 'PROCESSED'
-            videoModel.save()
-            print(f"THREAD FINISHED VideoService.processes--> {VideoService.processes.__str__()}")
+            def getParticleData(object):
+                return {
+                    'x': object['circle'][0][0],
+                    'y': object['circle'][0][1],
+                    'radius': object['circle'][1],
+                    'area': object['area'],
+                }
 
-          VideoService.processes[videoPath] = videoCore
-          new_thread = threading.Thread(target=process)
-          new_thread.start()
+            def saveFrameData(objects):
+                frame = {
+                    'particles': [getParticleData(object) for object in objects],
+                }
+                videoModel.frames.append(frame)
+                videoModel.save()
 
-        
-        
+            videoCore = Video(videoPath)
 
-        
+            def process():
+                videoModel.status = 'PROCESSING'
+                videoModel.save()
+                videoCore.process(action=saveFrameData)
+                del VideoService.processes[videoPath]
+                videoModel.status = 'PROCESSED'
+                videoModel.save()
+                print(
+                    f"THREAD FINISHED VideoService.processes--> {VideoService.processes.__str__()}")
+
+            VideoService.processes[videoPath] = videoCore
+            new_thread = threading.Thread(target=process)
+            new_thread.start()

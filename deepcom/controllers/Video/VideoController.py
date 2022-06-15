@@ -1,6 +1,8 @@
 import json
 from django.http import HttpRequest, HttpResponse
 
+
+from .get_data import get_data
 from .list_available import list_available
 from .check_status import check_status
 from .process import process_video
@@ -16,7 +18,8 @@ class VideoController:
 
     get_actions = {
       "check-status": check_status,
-      "list-available": list_available
+      "list-available": list_available,
+      "get-data": get_data
     }
 
     def __init__(self):
@@ -76,8 +79,8 @@ class VideoController:
             }
             return response
 
-        payload = request.GET.get('payload')
-        response = VideoController.get(action, payload)
+        
+        response = VideoController.get(action, request)
         return response
 
     def post(action, payload):

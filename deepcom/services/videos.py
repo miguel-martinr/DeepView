@@ -2,13 +2,15 @@ import os
 
 from deepcom.apps import DeepcomConfig
 from deepviewcore.Video import Video
-
+import threading
 from deepcom.models import VideoModel
 
 
 class VideoService:
+    processes = {}
     def __init__(self):
         pass
+
 
     def validateVideoFile(filename):
         videos_path = DeepcomConfig.videos_path
@@ -46,6 +48,7 @@ class VideoService:
         if VideoModel.objects.filter(video_path = videoPath):
           print ("Video exists")
         else:
+          print("Video does not exist")
           # Create a new video model
           videoModel = VideoModel(video_path=videoPath, frames=[])
           videoModel.save()
@@ -66,12 +69,19 @@ class VideoService:
             videoModel.save()
           
           videoCore = Video(videoPath)
-          videoModel.status = 'PROCESSING'
-          videoModel.save()
-          videoCore.process(showContours=True, action=saveFrameData)
-          videoModel.status = 'PROCESSED'
-          videoModel.save()
-          print("Video does not exist")
+
+          def process():
+            videoModel.status = 'PROCESSING'
+            videoModel.save()
+            videoCore.process(action=saveFrameData)
+            del VideoService.processes[videoPath]
+            videoModel.status = 'PROCESSED'
+            videoModel.save()
+            print(f"THREAD FINISHED VideoService.processes--> {VideoService.processes.__str__()}")
+
+          VideoService.processes[videoPath] = videoCore
+          new_thread = threading.Thread(target=process)
+          new_thread.start()
 
         
         

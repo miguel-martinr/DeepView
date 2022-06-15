@@ -8,6 +8,7 @@ from deepcom.models import VideoModel
 
 class VideoService:
     processes = {}
+    lock = threading.Lock()
 
     def __init__(self):
         pass
@@ -44,9 +45,10 @@ class VideoService:
 
     def stopProcessing(videoPath):
         if videoPath in VideoService.processes:
-            video: Video = VideoService.processes[videoPath]
-            video.stop_processing()
-            return True
+            with VideoService.lock:
+                video: Video = VideoService.processes[videoPath]
+                video.stop_processing()
+                return True
             # TODO: check if process is complete
         else:
             return False
@@ -84,7 +86,12 @@ class VideoService:
                 videoModel.save()
                 videoCore.process(action=saveFrameData)
                 del VideoService.processes[videoPath]
-                videoModel.status = 'PROCESSED'
+                
+                if videoCore.numOfFrames() == len(videoModel.frames):
+                  videoModel.status = 'PROCESSED'
+                else:
+                  videoModel.status = 'STOPPED'
+
                 videoModel.save()
                 print(
                     f"THREAD FINISHED VideoService.processes--> {VideoService.processes.__str__()}")

@@ -9,7 +9,7 @@ def check_status(video_name):
     if (VideoModel.objects.filter(video_path=video_path)):
       response = {
           'success': True,
-          'status': VideoModel.objects.get(video_path=video_path).status
+          'message': VideoModel.objects.get(video_path=video_path).status
       }
 
     else: 

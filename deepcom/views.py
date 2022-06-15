@@ -1,24 +1,19 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from deepcom.controllers.processed_video.get import get_processed_video_controller
-from deepcom.models import ParticleData, VideoModel
+
+
 
 
 
 # Hello
 def say_hello(request):
-
     return render(request, 'hello.html', {
         'name': 'Miguel',
     })
 
 
-# Processed video
-def processed_video(request):
-  if request.method == 'GET':
-    return get_processed_video_controller(request)
-  else:
-    return HttpResponse(status=404)
+
+
 
 
 

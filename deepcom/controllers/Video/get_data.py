@@ -12,15 +12,28 @@ def summarize_frames(size, frames):
     for i in range(0, len(frames), size):
         segment = frames[i:i+size]
         # print(f"###Segment: {segment}")
-        result.append(sum([len(frame['particles']) for frame in segment]) / len(segment))
+        result.append(sum([len(frame['particles']) for frame in segment]))
 
     return result
+
+
+def get_particles_quantity(frames: list, unit='seconds'):
+    groupSizes = {
+        'seconds': 30,
+        'minutes': 30 * 60,
+        'hours': 30 * 60 * 60,
+    }
+
+    multiplier = groupSizes[unit]
+    summarized = summarize_frames(multiplier, frames)
+    return summarized
 
 
 def get_data(request: HttpRequest):
     """
     Get data from the video.
     """
+
     try:
         video_name = request.GET.get('video_name')
     except KeyError:
@@ -29,23 +42,25 @@ def get_data(request: HttpRequest):
             'message': 'No video name provided',
         }
 
+    dataGetters = {
+        'ParticlesAverage': get_particles_quantity,
+    }
+
     try:
-        params = request.GET.get('params')
+        type = request.GET.get('type')
     except KeyError:
-        return {
-            'success': False,
-            'message': 'No params provided',
-        }
+        type = 'ParticlesAverage'
 
-    params = json.loads(params)
+    try:
+        unit = request.GET.get('unit')
+    except KeyError:
+        unit = 'minutes'
 
-    # Summarize frames
     response = {
         'success': True,
     }
 
     video_path = DeepcomConfig.getVideoPath(video_name)
-
     if len(VideoModel.objects.filter(video_path=video_path)) == 0:
         return {
             'success': False,
@@ -53,15 +68,7 @@ def get_data(request: HttpRequest):
         }
 
     video_model: VideoModel = VideoModel.objects.get(video_path=video_path)
+    data = dataGetters[type](video_model.frames, unit)
 
-    summarizeFrames = params.get('summarizeFrames')
-    if summarizeFrames:
-        response['message'] = {
-            'frames': summarize_frames(summarizeFrames, video_model.frames),
-        }
-    else:
-        response["message"] = {
-            "frames": video_model.frames
-        }
-
+    response["data"] = data
     return response

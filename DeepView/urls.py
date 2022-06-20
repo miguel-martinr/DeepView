@@ -22,11 +22,10 @@ from django.urls import include, path
 
 from django.urls import include, path
 
-from deepcom import views
+
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),    
     path('deepcom/', include('deepcom.urls')),
-    
 ]

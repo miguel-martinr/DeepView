@@ -8,12 +8,8 @@ def get_data(request: HttpRequest):
     """
     Get data from the video.
     """
-
-    body = request.body.decode('utf-8')
-    body = json.loads(body)
-
     try:
-        video_name = body['video_name']
+        video_name = request.GET.get('video_name')
     except KeyError:
         return {
             'success': False,
@@ -21,16 +17,15 @@ def get_data(request: HttpRequest):
         }
 
     try:
-      params = body['params']
+        params = request.GET.get('params')
     except KeyError:
-      return {
+        return {
             'success': False,
             'message': 'No video name provided',
         }
 
-      
     video_path = DeepcomConfig.getVideoPath(video_name)
-    
+
     if len(VideoModel.objects.filter(video_path=video_path)) == 0:
         return {
             'success': False,
@@ -41,7 +36,7 @@ def get_data(request: HttpRequest):
 
     response = {"success": True}
     response["message"] = {
-      "frames": video_model.frames
+        "frames": video_model.frames
     }
-    
+
     return response

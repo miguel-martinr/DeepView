@@ -22,9 +22,10 @@ class VideoService:
         """Gets available videos stats from the videos folder.
         Each video stats is a dictionary with the following keys:
          - name: video name
-         - size_in_bytes: video size in bytes
+         - size_in_MB: video size in MB
          - duration_in_seconds: video duration in seconds
          - fps: video frames per second
+         - status: video status. (processing, processed, stopped, unprocessed)
 
         """
 
@@ -39,6 +40,13 @@ class VideoService:
             current_stats = video.getStats()
             del current_stats['path']
             current_stats['name'] = os.path.basename(videopath)
+            
+            if (not VideoModel.objects.filter(video_path=videopath)):
+                current_stats['status'] = 'unprocessed'
+            else:
+                videoModel = VideoModel.objects.get(video_path=videopath)
+                current_stats['status'] = videoModel.status
+
             # current_stats['status'] = 'UNPROCESSED'
             videos_stats.append(current_stats)
         return videos_stats
@@ -72,25 +80,28 @@ class VideoService:
                     'area': object['area'],
                 }
 
-            def saveFrameData(objects):
-                frame = {
-                    'particles': [getParticleData(object) for object in objects],
-                }
-                videoModel.frames.append(frame)
-                videoModel.save()
-
             videoCore = Video(videoPath)
+            def saveData(frames):            
+                for cur_frame in frames:                  
+                  frame = {
+                      'particles': [getParticleData(object) for object in cur_frame],
+                  }
+                  videoModel.frames.append(frame)                
+                videoModel.save()
+                
 
             def process():
-                videoModel.status = 'PROCESSING'
+                videoModel.status = 'processing'
                 videoModel.save()
-                videoCore.process(action=saveFrameData)
+
+                videoCore.frame_interval = 2000 # Save each 2000 frames
+                videoCore.process(action=saveData)
                 del VideoService.processes[videoPath]
                 
                 if videoCore.numOfFrames() == len(videoModel.frames):
-                  videoModel.status = 'PROCESSED'
+                  videoModel.status = 'processed'
                 else:
-                  videoModel.status = 'STOPPED'
+                  videoModel.status = 'stopped'
 
                 videoModel.save()
                 print(

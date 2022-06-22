@@ -12,7 +12,7 @@ def summarize_frames(size, frames):
     for i in range(0, len(frames), size):
         segment = frames[i:i+size]
         # print(f"###Segment: {segment}")
-        result.append(sum([len(frame['particles']) for frame in segment]))
+        result.append(sum([len(frame['particles']) for frame in segment]) / len(segment))
 
     return result
 

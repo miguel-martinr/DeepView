@@ -17,9 +17,9 @@ class VideoController:
     }
 
     get_actions = {
-      "check-status": check_status,
-      "list-available": list_available,
-      "get-data": get_data
+        "check-status": check_status,
+        "list-available": list_available,
+        "get-data": get_data
     }
 
     def __init__(self):
@@ -79,7 +79,6 @@ class VideoController:
             }
             return response
 
-        
         response = VideoController.get(action, request)
         return response
 

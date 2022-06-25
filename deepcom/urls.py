@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     path('', views.say_hello),
-    path('video', VideoController()),
+    path('video', views.video),
     path('videos/<str:video_name>/', RedirectView.as_view(url='http://localhost/videos/%(video_name)s')),
 ]
 

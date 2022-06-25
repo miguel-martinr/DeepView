@@ -1,5 +1,6 @@
 from deepcom.apps import DeepcomConfig
 from deepcom.models import VideoModel
+from deepcom.services.videos import VideoService
 
 
 def check_status(request):
@@ -19,9 +20,17 @@ def check_status(request):
           'message': VideoModel.objects.get(video_path=video_path).status
       }
 
-    else: 
+    elif (VideoService.validateVideoFile(video_name)): 
+      response = {
+          'success': True,
+          'message': 'unprocessed'
+      }
+
+    else:
       response = {
           'success': False,
           'message': 'Video not found'
       }
+
+
     return response

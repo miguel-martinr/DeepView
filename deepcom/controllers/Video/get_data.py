@@ -24,9 +24,36 @@ def get_particles_quantity(frames: list, unit='seconds'):
         'hours': 30 * 60 * 60,
     }
 
-    multiplier = groupSizes[unit]
-    summarized = summarize_frames(multiplier, frames)
-    return summarized
+    avg_by_second = summarize_frames(groupSizes['seconds'], frames)
+
+    if (unit == 'seconds'): return avg_by_second
+    
+    elif (unit == 'minutes'):
+      total_by_minute = []
+      size = 60
+
+      for i in range(0, len(avg_by_second), size):
+        seconds = avg_by_second[i : i + size]
+        total_by_minute.append(sum(seconds))
+
+      minutes_count = len(total_by_minute)
+      avg_by_minute = [t / minutes_count for t in total_by_minute]
+      
+      return avg_by_minute
+    
+    else:
+      total_by_hour = []
+      size = 60 * 60 
+
+      for i in range(0, len(avg_by_second), size):
+        seconds = avg_by_second[i : i + size]
+        total_by_minute.append(sum(seconds))
+      
+      hours_count = len(total_by_hour)
+      avg_by_hour = [t / hours_count for t in total_by_hour]
+
+      return avg_by_hour
+    
 
 
 def get_data(request: HttpRequest):

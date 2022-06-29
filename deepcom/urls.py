@@ -8,7 +8,7 @@ from . import views
 urlpatterns = [
     path('', views.say_hello),
     path('video', views.video),
-    path('videos/<str:video_name>/', RedirectView.as_view(url='http://localhost/videos/%(video_name)s')),
+    path('videos/<str:video_name>/', RedirectView.as_view(url='http://localhost:8000/static/videos/%(video_name)s')),
 ]
 
 

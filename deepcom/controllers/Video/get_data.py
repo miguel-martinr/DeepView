@@ -22,11 +22,6 @@ def mode_by_segment(segments):
 
 
 def get_particles_quantity(frames: list, unit='seconds'):
-    groupSizes = {
-        'seconds': 30,
-        'minutes': 60,
-        'hours': 60 * 60,
-    }
 
     particles_per_frame = [len(frame['particles']) for frame in frames]
 

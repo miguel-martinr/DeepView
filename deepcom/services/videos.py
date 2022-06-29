@@ -13,12 +13,26 @@ class VideoService:
     def __init__(self):
         pass
 
-    def videoExistsInDB(videoPath):
-      documents = VideoModel.objects.filter(video_path=videoPath)
+    def videoExistsInDB(videoPath = None, videoName = None):
+      if videoPath is not None:
+        path = videoPath
+      elif videoName is not None:
+        path = DeepcomConfig.getVideoPath(videoName)
+      else:
+        return False
+
+      documents = VideoModel.objects.filter(video_path=path)
       return len(documents) > 0
 
-    def getVideoModel(videoPath):
-      return VideoModel.objects.get(video_path=videoPath)
+    def getVideoModel(videoPath = None, videoName = None):
+      if videoPath is not None:
+        path = videoPath
+      elif videoName is not None:
+        path = DeepcomConfig.getVideoPath(videoName)
+      else:
+        return False
+
+      return VideoModel.objects.get(video_path=path)
 
     def validateVideoFile(filename):
         videos_path = DeepcomConfig.videos_path
@@ -117,3 +131,9 @@ class VideoService:
             VideoService.processes[videoPath] = videoCore
             new_thread = threading.Thread(target=process)
             new_thread.start()
+
+    def processFrame(videoPath, frameIndex, params):
+        video = Video(videoPath)
+        video.setFrameIndex(frameIndex)
+        return video.processFrame(options=params)
+        

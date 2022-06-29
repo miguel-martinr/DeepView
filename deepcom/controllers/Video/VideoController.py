@@ -8,20 +8,20 @@ from .list_available import list_available
 from .check_status import check_status
 from .process import process_video
 from .stop_processing import stop_processing
-from .get_contours import get_contours
+from .process_frame import process_frame
 
 
 class VideoController:
     post_actions = {
         "stop": stop_processing,
         "process": process_video,
+        "process_frame": process_frame,
     }
 
     get_actions = {
         "check-status": check_status,
         "list-available": list_available,
-        "get-data": get_data,
-        "get-contours": get_contours,
+        "get-data": get_data,        
     }
 
     def __init__(self):

@@ -1,6 +1,5 @@
-from django.http import HttpRequest
 from deepcom.apps import DeepcomConfig
-from deepcom.models import VideoModel
+
 
 from deepcom.services.videos import VideoService
 

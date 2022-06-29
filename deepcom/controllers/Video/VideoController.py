@@ -2,11 +2,13 @@ import json
 from django.http import HttpRequest, HttpResponse
 
 
+
 from .get_data import get_data
 from .list_available import list_available
 from .check_status import check_status
 from .process import process_video
 from .stop_processing import stop_processing
+from .get_contours import get_contours
 
 
 class VideoController:
@@ -18,7 +20,8 @@ class VideoController:
     get_actions = {
         "check-status": check_status,
         "list-available": list_available,
-        "get-data": get_data
+        "get-data": get_data,
+        "get-contours": get_contours,
     }
 
     def __init__(self):

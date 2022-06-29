@@ -13,7 +13,6 @@ class VideoController:
     post_actions = {
         "stop": stop_processing,
         "process": process_video,
-        "check_status": check_status
     }
 
     get_actions = {
@@ -54,7 +53,7 @@ class VideoController:
         action = body['action']
         payload = body['payload']
 
-        print(action, payload)
+        print("##################", action, payload)
         response = VideoController.post(action, payload)
         return response
 

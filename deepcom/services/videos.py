@@ -13,6 +13,13 @@ class VideoService:
     def __init__(self):
         pass
 
+    def videoExistsInDB(videoPath):
+      documents = VideoModel.objects.filter(video_path=videoPath)
+      return len(documents) > 0
+
+    def getVideoModel(videoPath):
+      return VideoModel.objects.get(video_path=videoPath)
+
     def validateVideoFile(filename):
         videos_path = DeepcomConfig.videos_path
         return os.path.isfile(os.path.join(videos_path, filename)) and \
@@ -64,7 +71,7 @@ class VideoService:
     def processVideo(videoPath):
         """Processes a video and returns the processed video stats.
         """
-        if VideoModel.objects.filter(video_path=videoPath):
+        if VideoService.videoExistsInDB(videoPath):
             print("Video exists")
         else:
             print("Video does not exist")

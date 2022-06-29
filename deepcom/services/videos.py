@@ -95,7 +95,7 @@ class VideoService:
                 videoModel.save()
 
                 videoCore.frame_interval = 2000 # Save each 2000 frames
-                videoCore.process(action=saveData)
+                videoCore.process(action=saveData, showContours=True)
                 del VideoService.processes[videoPath]
                 
                 if videoCore.numOfFrames() == len(videoModel.frames):

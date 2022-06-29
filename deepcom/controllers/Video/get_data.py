@@ -1,59 +1,51 @@
 from django.http import HttpRequest
+import numpy as np
 from deepcom.apps import DeepcomConfig
 from deepcom.models import VideoModel
 from scipy import stats
 
-def summarize_frames(size, frames):
-    """
-    Summarize frames.
-    """
+
+def segment(values, size):
+    segments = []
+    for i in range(0, len(values), size):
+        segments.append(values[i:i+size])
+    return segments
+
+
+def mode_by_segment(segments):
     result = []
-    for i in range(0, len(frames), size):
-        segment = frames[i:i+size]
-        # print(f"###Segment: {segment}")
-        mode = stats.mode([len(frame['particles']) for frame in segment])[0]
+    for segment in segments:                
+        mode = stats.mode(segment)[0]
         result.append(int(mode[0]))
-    
     return result
+
 
 
 def get_particles_quantity(frames: list, unit='seconds'):
     groupSizes = {
         'seconds': 30,
-        'minutes': 30 * 60,
-        'hours': 30 * 60 * 60,
+        'minutes': 60,
+        'hours': 60 * 60,
     }
 
-    avg_by_second = summarize_frames(groupSizes['seconds'], frames)
+    particles_per_frame = [len(frame['particles']) for frame in frames]
 
-    if (unit == 'seconds'): return avg_by_second
-    
-    elif (unit == 'minutes'):
-      total_by_minute = []
-      size = 60
+    seconds_segments = segment(particles_per_frame, 30)
+    by_second = mode_by_segment(seconds_segments)
 
-      for i in range(0, len(avg_by_second), size):
-        seconds = avg_by_second[i : i + size]
-        total_by_minute.append(sum(seconds))
+    if unit == 'seconds': return by_second
 
-      minutes_count = len(total_by_minute)
-      avg_by_minute = [t / minutes_count for t in total_by_minute]
-
-      return avg_by_minute
+    if unit == 'minutes': 
+      
+      minutes_segments = segment(by_second, 60)
+      by_minute = mode_by_segment([np.sum(min) for min in minutes_segments])
+      return by_minute
     
     else:
-      total_by_hour = []
-      size = 60 * 60 
+      hours_segments = segment(by_second, 1800)
+      by_hour = mode_by_segment([np.sum(hour) for hour in hours_segments])
+      return by_hour
 
-      for i in range(0, len(avg_by_second), size):
-        seconds = avg_by_second[i : i + size]
-        total_by_minute.append(sum(seconds))
-      
-      hours_count = len(total_by_hour)
-      avg_by_hour = [t / hours_count for t in total_by_hour]
-
-      return avg_by_hour
-    
 
 
 def get_data(request: HttpRequest):

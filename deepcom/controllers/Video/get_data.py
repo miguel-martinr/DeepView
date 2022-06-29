@@ -1,7 +1,7 @@
 from django.http import HttpRequest
 from deepcom.apps import DeepcomConfig
 from deepcom.models import VideoModel
-
+from scipy import stats
 
 def summarize_frames(size, frames):
     """
@@ -11,8 +11,9 @@ def summarize_frames(size, frames):
     for i in range(0, len(frames), size):
         segment = frames[i:i+size]
         # print(f"###Segment: {segment}")
-        result.append(sum([len(frame['particles']) for frame in segment]) / len(segment))
-
+        mode = stats.mode([len(frame['particles']) for frame in segment])[0]
+        result.append(int(mode[0]))
+    
     return result
 
 

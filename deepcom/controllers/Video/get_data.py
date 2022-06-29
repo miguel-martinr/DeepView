@@ -1,4 +1,3 @@
-import json
 from django.http import HttpRequest
 from deepcom.apps import DeepcomConfig
 from deepcom.models import VideoModel
@@ -38,7 +37,7 @@ def get_particles_quantity(frames: list, unit='seconds'):
 
       minutes_count = len(total_by_minute)
       avg_by_minute = [t / minutes_count for t in total_by_minute]
-      
+
       return avg_by_minute
     
     else:

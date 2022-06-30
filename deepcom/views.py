@@ -12,16 +12,6 @@ from deepcom.controllers.Video.VideoController import VideoController
 
 
 
-
-# Hello
-def say_hello(request):
-    return render(request, 'hello.html', {
-        'name': 'Miguel',
-    })
-
-
-
-
 @csrf_exempt
 def video(request):
   controller = VideoController()

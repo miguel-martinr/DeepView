@@ -9,8 +9,7 @@ def render_react(request: HttpRequest):
     return render(request, "index.html")
 
 
-urlpatterns = [
-    path('', views.say_hello),
+urlpatterns = [    
     path('video', views.video),
     path('videos/<str:video_name>/', views.video_service),
     re_path(r"^(?:.*)/?$", render_react),

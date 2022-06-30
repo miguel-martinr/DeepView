@@ -32,7 +32,7 @@ class FrameForm(forms.ModelForm):
 
 class VideoModel(models.Model):
   _id = models.ObjectIdField()
-  created_at = models.DateTimeField(auto_created=True)
+  created_at = models.DateTimeField(auto_now_add=True)
   video_path = models.CharField(max_length=255)
   status = models.CharField(default='UNPROCESSED', max_length=255)
   

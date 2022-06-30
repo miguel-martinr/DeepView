@@ -59,6 +59,6 @@ class ProcessingParametersModel(models.Model):
       default = DeepcomConfig.default_preprocess_parameters
   )
 
-  video_linked = models.CharField(max_length=255, null=False)
+  video_linked = models.CharField(max_length=255, null=False, unique=True)
   objects = models.DjongoManager()
 

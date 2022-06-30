@@ -16,6 +16,13 @@ class ParametersService:
         # TODO
         return True
 
+    def updateParameters(video_path: str, parameters: Dict):
+        if not ParametersService.validateParameters(parameters):
+            raise Exception("Invalid processing parameters")
+
+        preprocess = parameters.get("preprocess")
+        ProcessingParametersModel.objects.filter(video_linked=video_path).update(preprocess=preprocess)
+
     def saveParameters(video_path: str, parameters: Dict):
         defaultParameters = ParametersService.getDefaultParameters()
         defaultParameters.update(parameters)

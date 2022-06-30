@@ -116,7 +116,7 @@ class VideoService:
                 videoModel.save()
 
                 videoCore.frame_interval = 2000 # Save each 2000 frames
-                videoCore.process(action=saveData, showContours=True)
+                videoCore.process(action=saveData, showContours=False)
                 del VideoService.processes[videoPath]
                 
                 if videoCore.numOfFrames() == len(videoModel.frames):
@@ -131,7 +131,7 @@ class VideoService:
             VideoService.processes[videoPath] = videoCore
             new_thread = threading.Thread(target=process)
             new_thread.start()
-            
+
 
     def processFrame(videoPath, frameIndex, params):
         video = Video(videoPath)

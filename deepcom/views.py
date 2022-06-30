@@ -7,6 +7,7 @@ from DeepView.settings import STATIC_URL
 from deepcom.apps import DeepcomConfig
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import RedirectView
+from deepcom.controllers.Parameters.ParametersController import ParametersController
 from deepcom.controllers.Video.VideoController import VideoController
 
 
@@ -16,6 +17,10 @@ from deepcom.controllers.Video.VideoController import VideoController
 def video(request):
   controller = VideoController()
   return controller(request) 
+
+def parameters(request: HttpRequest):
+  controller = ParametersController()
+  return controller(request)
 
 
 def video_service(request: HttpRequest, video_name):
@@ -27,6 +32,5 @@ def video_service(request: HttpRequest, video_name):
   return RedirectView.as_view(url=fullpath)(request)
 
 
-    
 
 

@@ -4,6 +4,7 @@ from deepcom.apps import DeepcomConfig
 from deepviewcore.Video import Video
 import threading
 from deepcom.models import VideoModel
+from deepcom.services.ParametersService import ParametersService
 
 
 class VideoService:
@@ -86,9 +87,9 @@ class VideoService:
         """Processes a video and returns the processed video stats.
         """
         if VideoService.videoExistsInDB(videoPath):
-            print("Video exists")
+            print("Video exists. Skipping process...")
         else:
-            print("Video does not exist")
+            print("Video does not exist. Adding it...")
             # Create a new video model
             videoModel = VideoModel(video_path=videoPath, frames=[])
             videoModel.save()
@@ -102,6 +103,11 @@ class VideoService:
                 }
 
             videoCore = Video(videoPath)
+
+            # Get processing parameters
+            options = ParametersService.getParametersForVideo(videoPath)
+            print(f"##### OPTIONS: {options}")
+
             def saveData(frames):            
                 for cur_frame in frames:                  
                   frame = {
@@ -116,7 +122,7 @@ class VideoService:
                 videoModel.save()
 
                 videoCore.frame_interval = 2000 # Save each 2000 frames
-                videoCore.process(action=saveData, showContours=False)
+                videoCore.process(action=saveData, showContours=False, options=options)
                 del VideoService.processes[videoPath]
                 
                 if videoCore.numOfFrames() == len(videoModel.frames):

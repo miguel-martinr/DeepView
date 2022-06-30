@@ -25,8 +25,11 @@ from django.urls import include, path
 from django.urls import include, path
 
 
+def render_react(request: HttpRequest):
+    return render(request, "index.html")
 
 urlpatterns = [
     path('admin/', admin.site.urls),    
     path('deepcom/', include('deepcom.urls')),
+    re_path(r"^(?:.*)/?$", render_react),
 ]

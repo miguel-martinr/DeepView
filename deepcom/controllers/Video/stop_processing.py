@@ -1,6 +1,6 @@
 from deepcom.apps import DeepcomConfig
 from deepcom.models import VideoModel
-from deepcom.services.videos import VideoService
+from deepcom.services.VideoService import VideoService
 
 
 def stop_processing(video_name):

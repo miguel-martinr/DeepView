@@ -1,7 +1,7 @@
 from deepcom.apps import DeepcomConfig
 
 
-from deepcom.services.videos import VideoService
+from deepcom.services.VideoService import VideoService
 
 
 def process_frame(payload):

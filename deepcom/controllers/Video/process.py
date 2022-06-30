@@ -1,6 +1,6 @@
 
 from deepcom.apps import DeepcomConfig
-from deepcom.services.videos import VideoService
+from deepcom.services.VideoService import VideoService
 
 def process_video(video_name):
     video_path = DeepcomConfig.getVideoPath(video_name)

@@ -6,11 +6,11 @@ name = "pypi"
 [packages]
 djongo = "*"
 pymongo = "==3.12.1"
-deepviewcore = {path = "C:/Users/migue/Documents/U/4to/TFG/DeepViewCore/dist/deepviewcore-0.1.2.tar.gz"}
 django = "==3.1.12"
 django-ranged-response = "*"
 scipy = "*"
 whitenoise = "*"
+deepviewcore = "*"
 
 [dev-packages]
 autopep8 = "*"

@@ -131,6 +131,7 @@ class VideoService:
             VideoService.processes[videoPath] = videoCore
             new_thread = threading.Thread(target=process)
             new_thread.start()
+            
 
     def processFrame(videoPath, frameIndex, params):
         video = Video(videoPath)

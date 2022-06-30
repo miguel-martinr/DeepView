@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from os import path
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,8 +28,8 @@ SECRET_KEY = 'django-insecure-_6vcgd)5c=p06px^ezf6wl!x3%8@@9t@ki)62_(3byvh4n=0@9
 DEBUG = True
 
 ALLOWED_HOSTS = [
-  'localhost',
-  '192.168.1.18'
+    'localhost',
+    '192.168.1.18'
 ]
 
 
@@ -70,7 +71,7 @@ ROOT_URLCONF = 'DeepView.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "dist")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,7 +140,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = (path.join(BASE_DIR, "static"),)
+
+STATICFILES_DIRS = (
+    path.join(BASE_DIR, "dist/assets"),
+    path.join(BASE_DIR, "static"),
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

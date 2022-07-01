@@ -2,16 +2,16 @@ import json
 from django.http import HttpRequest, HttpResponse
 
 from deepcom.controllers.Parameters.add_parameters import add_parameters
-
+from deepcom.controllers.Parameters.get_parameters import get_parameters
 
 
 class ParametersController:
     post_actions = {
-       "add": add_parameters,
+        "add": add_parameters,
     }
 
     get_actions = {
-
+        "get-parameters-for-video": get_parameters,
     }
 
     def __init__(self):

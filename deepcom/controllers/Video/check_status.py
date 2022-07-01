@@ -16,16 +16,16 @@ def check_status(request):
     
     if (VideoModel.objects.filter(video_path=video_path)):
       status = VideoModel.objects.get(video_path=video_path).status
-      if (status == 'processing'):
-        video_process: Video = VideoService.processes.get(video_path)
-        if (video_process is None): 
-          print(f"### {video_path} PROCESS NOT FOUND!")
-        else:
-          print(f"### {video_path} process --> {video_process.getCurrentFrameIndex()} / {video_process.numOfFrames()}")
       response = {
           'success': True,
           'message': status
       }
+
+      if (status == 'processing'):
+        video_process: Video = VideoService.processes.get(video_path)                
+        percentage = int(((video_process.getCurrentFrameIndex() + 1) * 100) / video_process.numOfFrames())
+        response["percentage"] = percentage
+          
 
     elif (VideoService.validateVideoFile(video_name)): 
       response = {

@@ -46,7 +46,7 @@ class ParametersController:
         action = body['action']
         payload = body['payload']
 
-        print("##################", action, payload)
+        # print("##################", action, payload)
         response = ParametersController.post(action, payload)
         return response
 

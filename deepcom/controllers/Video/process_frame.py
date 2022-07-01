@@ -1,4 +1,5 @@
 from deepcom.apps import DeepcomConfig
+from deepcom.services.ParametersService import ParametersService
 
 
 from deepcom.services.VideoService import VideoService
@@ -43,6 +44,8 @@ def process_frame(payload):
 
   # Form video path
   videoPath = DeepcomConfig.getVideoPath(video_name)  
+  params = ParametersService.formatParameters(params)
+  
   objects = VideoService.processFrame(videoPath, frame_index, params)[1]
   return {
     "success": True,

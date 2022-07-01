@@ -97,3 +97,23 @@ class ParametersService:
           "preprocess": preprocess,
           "process": process,
         }
+
+
+    def formatParameters(params):
+      """
+        Formats parameters so they can be accepted by deepviewcore
+      """
+      if not ParametersService.validateParameters(params):
+          raise Exception("Invalid parameters")
+
+      preprocess = params["preprocess"]          
+      width = preprocess["top_hat"]["kernelWidth"]          
+      height = preprocess["top_hat"]["kernelHeight"]          
+
+      preprocess["top_hat"] = {
+        "filterSize": (width, height)
+      }
+      
+      params["preprocess"] = preprocess
+
+      return params

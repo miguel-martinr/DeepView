@@ -14,26 +14,26 @@ class VideoService:
     def __init__(self):
         pass
 
-    def videoExistsInDB(videoPath = None, videoName = None):
-      if videoPath is not None:
-        path = videoPath
-      elif videoName is not None:
-        path = DeepcomConfig.getVideoPath(videoName)
-      else:
-        return False
+    def videoExistsInDB(videoPath=None, videoName=None):
+        if videoPath is not None:
+            path = videoPath
+        elif videoName is not None:
+            path = DeepcomConfig.getVideoPath(videoName)
+        else:
+            return False
 
-      documents = VideoModel.objects.filter(video_path=path)
-      return len(documents) > 0
+        documents = VideoModel.objects.filter(video_path=path)
+        return len(documents) > 0
 
-    def getVideoModel(videoPath = None, videoName = None):
-      if videoPath is not None:
-        path = videoPath
-      elif videoName is not None:
-        path = DeepcomConfig.getVideoPath(videoName)
-      else:
-        return False
+    def getVideoModel(videoPath=None, videoName=None):
+        if videoPath is not None:
+            path = videoPath
+        elif videoName is not None:
+            path = DeepcomConfig.getVideoPath(videoName)
+        else:
+            return False
 
-      return VideoModel.objects.get(video_path=path)
+        return VideoModel.objects.get(video_path=path)
 
     def validateVideoFile(filename):
         videos_path = DeepcomConfig.videos_path
@@ -62,7 +62,7 @@ class VideoService:
             current_stats = video.getStats()
             del current_stats['path']
             current_stats['name'] = os.path.basename(videopath)
-            
+
             if (not VideoModel.objects.filter(video_path=videopath)):
                 current_stats['status'] = 'unprocessed'
             else:
@@ -106,29 +106,29 @@ class VideoService:
 
             # Get processing parameters
             options = ParametersService.getParametersForVideo(videoPath)
-            #print(f"##### OPTIONS: {options}")
+            # print(f"##### OPTIONS: {options}")
 
-            def saveData(frames):            
-                for cur_frame in frames:                  
-                  frame = {
-                      'particles': [getParticleData(object) for object in cur_frame],
-                  }
-                  videoModel.frames.append(frame)                
+            def saveData(frames):
+                for cur_frame in frames:
+                    frame = {
+                        'particles': [getParticleData(object) for object in cur_frame],
+                    }
+                    videoModel.frames.append(frame)
                 videoModel.save()
-                
 
             def process():
                 videoModel.status = 'processing'
                 videoModel.save()
 
-                videoCore.frame_interval = 2000 # Save each 2000 frames
-                videoCore.process(action=saveData, showContours=False, options=options)
+                videoCore.frame_interval = 2000  # Save each 2000 frames
+                videoCore.process(
+                    action=saveData, showContours=False, options=options)
                 del VideoService.processes[videoPath]
-                
+
                 if videoCore.numOfFrames() == len(videoModel.frames):
-                  videoModel.status = 'processed'
+                    videoModel.status = 'processed'
                 else:
-                  videoModel.status = 'stopped'
+                    videoModel.status = 'stopped'
 
                 videoModel.save()
                 print(
@@ -138,9 +138,7 @@ class VideoService:
             new_thread = threading.Thread(target=process)
             new_thread.start()
 
-
     def processFrame(videoPath, frameIndex, params):
         video = Video(videoPath)
         video.setFrameIndex(frameIndex)
         return video.processFrame(options=params)
-        

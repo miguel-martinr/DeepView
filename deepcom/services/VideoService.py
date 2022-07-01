@@ -106,7 +106,7 @@ class VideoService:
 
             # Get processing parameters
             options = ParametersService.getParametersForVideo(videoPath)
-            print(f"##### OPTIONS: {options}")
+            #print(f"##### OPTIONS: {options}")
 
             def saveData(frames):            
                 for cur_frame in frames:                  

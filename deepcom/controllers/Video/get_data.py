@@ -43,12 +43,5 @@ def get_data(request: HttpRequest):
         }
 
     
-    by_second = VideoService.getParticlesBySecond(video_path)
-
-    getters = {
-      'seconds': lambda: by_second,
-      'minutes': lambda: summarize(by_second, 60),
-      'hours': lambda: summarize(by_second, 3600)
-    }
-    response["data"] = getters[unit]()
+    response["data"] = VideoService.getParticlesByTimeUnit(video_path, unit)
     return response

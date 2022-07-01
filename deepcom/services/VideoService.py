@@ -5,7 +5,7 @@ from deepviewcore.Video import Video
 import threading
 from deepcom.models import VideoModel
 from deepcom.services.ParametersService import ParametersService
-from deepcom.services.utils import get_particles_quantity
+from deepcom.services.utils import get_particles_by_second, get_particles_quantity, segment
 
 
 class VideoService:
@@ -115,9 +115,9 @@ class VideoService:
                     }
                     formatted_frames.append(frame)
 
-                by_second = [{"mode": mode} for mode in get_particles_quantity(
-                    formatted_frames, 'seconds')]
-                    
+                by_second = [{"mode": mode}
+                             for mode in get_particles_by_second(formatted_frames)]
+
                 videoModel.by_second.extend(by_second)
                 videoModel.save()
 
@@ -158,3 +158,16 @@ class VideoService:
         model: VideoModel = VideoService.getVideoModel(videoPath)
         by_second = [second['mode'] for second in model.by_second]
         return by_second
+
+    def getParticlesByTimeUnit(videoPath: str, unit: str):
+        by_second = VideoService.getParticlesBySecond(videoPath)
+        if unit == 'seconds':
+            return by_second
+
+        elif unit == 'minutes':
+            group_size = 60
+
+        else:
+            group_size = 3600
+
+        return [sum(segment) for segment in segment(by_second, group_size)]

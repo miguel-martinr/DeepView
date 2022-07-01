@@ -21,6 +21,13 @@ def summarize(values, segments_size):
     by_unit = mode_by_segment(unit_segments)
     return by_unit
 
+
+def get_particles_by_second(frames: list):
+  particles_per_frame = [len(frame['particles']) for frame in frames]
+  segments_30frames = segment(particles_per_frame, 30)
+
+  return [int(stats.mode(segment)[0]) for segment in segments_30frames]
+
 def get_particles_quantity(frames: list, unit='seconds'):
 
     particles_per_frame = [len(frame['particles']) for frame in frames]

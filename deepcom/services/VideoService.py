@@ -79,8 +79,7 @@ class VideoService:
             with VideoService.lock:
                 video: Video = VideoService.processes[videoPath]
                 video.stop_processing()
-                return True
-            # TODO: check if process is complete
+                return True            
         else:
             return False
 

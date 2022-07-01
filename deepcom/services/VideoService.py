@@ -79,7 +79,7 @@ class VideoService:
             with VideoService.lock:
                 video: Video = VideoService.processes[videoPath]
                 video.stop_processing()
-                return True            
+                return True
         else:
             return False
 
@@ -117,6 +117,7 @@ class VideoService:
 
                 by_second = [{"mode": mode} for mode in get_particles_quantity(
                     formatted_frames, 'seconds')]
+                    
                 videoModel.by_second.extend(by_second)
                 videoModel.save()
 
@@ -135,7 +136,8 @@ class VideoService:
                     videoModel.status = 'processed'
                 else:
                     videoModel.status = 'stopped'
-                    videoCore.setFrameIndex(videoCore.getCurrentFrameIndex() - 1)
+                    videoCore.setFrameIndex(
+                        videoCore.getCurrentFrameIndex() - 1)
 
                 videoModel.save()
                 print(

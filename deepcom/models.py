@@ -49,7 +49,7 @@ class VideoModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     video_path = models.CharField(max_length=255)
-    status = models.CharField(default='UNPROCESSED', max_length=255)
+    status = models.CharField(default='unprocessed', max_length=255)
 
     by_second = models.ArrayField(
       model_container=Second

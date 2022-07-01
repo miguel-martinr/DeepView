@@ -5,6 +5,7 @@ from deepviewcore.Video import Video
 import threading
 from deepcom.models import VideoModel
 from deepcom.services.ParametersService import ParametersService
+from deepcom.services.utils import get_particles_quantity
 
 
 class VideoService:
@@ -91,7 +92,7 @@ class VideoService:
         else:
             print("Video does not exist. Adding it...")
             # Create a new video model
-            videoModel = VideoModel(video_path=videoPath, frames=[])
+            videoModel = VideoModel(video_path=videoPath, by_second=[])
             videoModel.save()
 
             def getParticleData(object):
@@ -105,27 +106,30 @@ class VideoService:
             videoCore = Video(videoPath)
 
             # Get processing parameters
-            options = ParametersService.getParametersForVideo(videoPath)
-            # print(f"##### OPTIONS: {options}")
+            options = ParametersService.getParametersForVideo(videoPath)            
 
             def saveData(frames):
+                formatted_frames = []
                 for cur_frame in frames:
                     frame = {
                         'particles': [getParticleData(object) for object in cur_frame],
                     }
-                    videoModel.frames.append(frame)
+                    formatted_frames.append(frame)
+                        
+                by_second = [{"mode": mode} for mode in get_particles_quantity(formatted_frames, 'seconds')]
+                videoModel.by_second.extend(by_second)
                 videoModel.save()
 
             def process():
                 videoModel.status = 'processing'
                 videoModel.save()
 
-                videoCore.frame_interval = 2000  # Save each 2000 frames
+                videoCore.frame_interval = 2010  # Save each 2010 frames (67 seconds of video)
                 videoCore.process(
                     action=saveData, showContours=False, options=options)
                 del VideoService.processes[videoPath]
 
-                if videoCore.numOfFrames() == len(videoModel.frames):
+                if videoCore.getDurationInSeconds() == len(videoModel.by_second):
                     videoModel.status = 'processed'
                 else:
                     videoModel.status = 'stopped'

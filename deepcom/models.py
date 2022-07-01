@@ -39,7 +39,7 @@ from .custom_models.processing_parameters import PreprocessParameters, ProcessPa
 
 
 class Second(models.Model):
-    data = models.IntegerField(null=False)
+    mode = models.IntegerField(null=False)
 
     class Meta:
         abstract = True

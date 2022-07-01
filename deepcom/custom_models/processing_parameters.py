@@ -10,6 +10,11 @@ class TopHatParameters(models.Model):
     class Meta:
         abstract = True
 
+class ThresholdParameters(models.Model):
+    thresh = models.IntegerField()
+
+    class Meta:
+        abstract = True
 
 class PreprocessParameters(models.Model):
     top_hat = models.EmbeddedField(
@@ -19,5 +24,12 @@ class PreprocessParameters(models.Model):
     class Meta:
         abstract = True
 
+class ProcessParameters(models.Model):
+    threshold = models.EmbeddedField(
+      model_container=ThresholdParameters
+    )
+
+    class Meta:
+        abstract = True
 
 

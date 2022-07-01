@@ -4,6 +4,7 @@ from deepcom.models import ProcessingParametersModel
 
 from django.forms.models import model_to_dict
 
+
 class ParametersService:
 
     def __init__():
@@ -20,8 +21,14 @@ class ParametersService:
         if not ParametersService.validateParameters(parameters):
             raise Exception("Invalid processing parameters")
 
+        parameters = ParametersService.fillParameters(parameters)
         preprocess = parameters.get("preprocess")
-        ProcessingParametersModel.objects.filter(video_linked=video_path).update(preprocess=preprocess)
+        process = parameters.get("process")
+
+        ProcessingParametersModel.objects.filter(video_linked=video_path).update(
+            preprocess=preprocess,
+            process=process
+        )
 
     def saveParameters(video_path: str, parameters: Dict):
         defaultParameters = ParametersService.getDefaultParameters()
@@ -31,10 +38,14 @@ class ParametersService:
         if not ParametersService.validateParameters(parameters):
             raise Exception("Invalid processing parameters")
 
+        parameters = ParametersService.fillParameters(parameters)
         preprocess = parameters.get("preprocess")
+        process = parameters.get("process")
 
         model = ProcessingParametersModel(
-            preprocess=preprocess, video_linked=video_path)
+            preprocess=preprocess,
+            process=process,
+            video_linked=video_path)
         model.save()
 
     def parametersExistsInDB(video_path: str):
@@ -49,8 +60,40 @@ class ParametersService:
 
         if (ParametersService.parametersExistsInDB(video_path)):
             parameters = ParametersService.getParametersInDB(video_path)
-            parameters = model_to_dict(parameters, fields=[field.name for field in parameters._meta.fields])
+            parameters = model_to_dict(
+                parameters, fields=[field.name for field in parameters._meta.fields])
         else:
             parameters = ParametersService.getDefaultParameters()
-        
+
         return parameters
+
+    def fillParameters(partial_parameters):
+        if partial_parameters is None:
+            return ParametersService.getDefaultParameters()
+
+        # Preprocess
+        preprocess = partial_parameters.get("preprocess")
+        if preprocess is None:                      
+            preprocess = DeepcomConfig.default_preprocess_parameters
+        
+        # Tophat
+        if preprocess.get("top_hat") is None:
+            preprocess["top_hat"] = DeepcomConfig.default_top_hat_parameters
+
+
+
+        # Process 
+        process = partial_parameters.get("process")
+        if process is None:           
+            process = DeepcomConfig.default_process_parameters
+
+        # Threshold
+        if process.get("threshold") is None:
+            process['threshold'] = DeepcomConfig.default_threshold_parameters        
+
+
+
+        return {
+          "preprocess": preprocess,
+          "process": process,
+        }

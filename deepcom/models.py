@@ -3,7 +3,7 @@ from django import forms
 
 from deepcom.apps import DeepcomConfig
 
-from .custom_models.processing_parameters import PreprocessParameters
+from .custom_models.processing_parameters import PreprocessParameters, ProcessParameters
 
 
 class ParticleData(models.Model):
@@ -56,7 +56,14 @@ class VideoModel(models.Model):
 class ProcessingParametersModel(models.Model):
   preprocess = models.EmbeddedField(
       model_container=PreprocessParameters,
+      null=False,
       default = DeepcomConfig.default_preprocess_parameters
+  )
+
+  process = models.EmbeddedField(
+    model_container=ProcessParameters,
+    null=False,
+    default = DeepcomConfig.default_process_parameters
   )
 
   video_linked = models.CharField(max_length=255, null=False, unique=True)

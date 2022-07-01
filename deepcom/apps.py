@@ -18,10 +18,19 @@ class DeepcomConfig(AppConfig):
       "kernelHeight": 9
     }
 
+    default_threshold_parameters = {
+      'thresh': 20
+    }
+
     default_preprocess_parameters = {
       "top_hat": default_top_hat_parameters
     }
 
+    default_process_parameters = {
+      "threshold": default_threshold_parameters,
+    }
+
     default_processing_parameters = {
       "preprocess": default_preprocess_parameters,
+      "process": default_process_parameters,
     }

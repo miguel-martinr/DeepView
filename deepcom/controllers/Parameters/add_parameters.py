@@ -9,7 +9,15 @@ from deepcom.services.ParametersService import ParametersService
 
 
 def add_parameters(payload):
-  
+  """
+    Waits a payload with this shape:
+    {
+      "parameters": Object,  # [Required] Parameters to be added, 
+                             # check it's shape at __parametersDoc__.
+
+      "video_name": string   # [Required] Video name. 
+    }
+  """  
   parameters = payload.get("parameters")
   
   if parameters is None:
@@ -35,7 +43,6 @@ def add_parameters(payload):
     ParametersService.saveParameters(video_path=video_path, parameters=parameters)
   
   except Exception as e:
-    
     return {
       "success": False,
       "message": f"{printExceptionMessage(e)}"

@@ -18,6 +18,7 @@ def video(request):
   controller = VideoController()
   return controller(request) 
 
+@csrf_exempt
 def parameters(request: HttpRequest):
   controller = ParametersController()
   return controller(request)

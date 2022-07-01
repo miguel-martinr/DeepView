@@ -16,24 +16,23 @@ def mode_by_segment(segments):
         result.append(int(mode[0]))
     return result
 
-
+def summarize(values, segments_size):    
+    unit_segments = segment(values, segments_size)
+    by_unit = mode_by_segment(unit_segments)
+    return by_unit
 
 def get_particles_quantity(frames: list, unit='seconds'):
 
     particles_per_frame = [len(frame['particles']) for frame in frames]
 
-    seconds_segments = segment(particles_per_frame, 30)
-    by_second = mode_by_segment(seconds_segments)
+    by_second = summarize(particles_per_frame, 30)
 
     if unit == 'seconds': return by_second
 
-    if unit == 'minutes': 
-      
-      minutes_segments = segment(by_second, 60)
-      by_minute = mode_by_segment([np.sum(min) for min in minutes_segments])
+    if unit == 'minutes':       
+      by_minute = summarize(by_second, 60)
       return by_minute
     
     else:
-      hours_segments = segment(by_second, 1800)
-      by_hour = mode_by_segment([np.sum(hour) for hour in hours_segments])
+      by_hour = summarize(by_second, 3600)
       return by_hour

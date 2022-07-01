@@ -106,7 +106,7 @@ class VideoService:
             videoCore = Video(videoPath)
 
             # Get processing parameters
-            options = ParametersService.getParametersForVideo(videoPath)            
+            options = ParametersService.getParametersForVideo(videoPath)
 
             def saveData(frames):
                 formatted_frames = []
@@ -115,8 +115,9 @@ class VideoService:
                         'particles': [getParticleData(object) for object in cur_frame],
                     }
                     formatted_frames.append(frame)
-                        
-                by_second = [{"mode": mode} for mode in get_particles_quantity(formatted_frames, 'seconds')]
+
+                by_second = [{"mode": mode} for mode in get_particles_quantity(
+                    formatted_frames, 'seconds')]
                 videoModel.by_second.extend(by_second)
                 videoModel.save()
 
@@ -124,15 +125,18 @@ class VideoService:
                 videoModel.status = 'processing'
                 videoModel.save()
 
-                videoCore.frame_interval = 2010  # Save each 2010 frames (67 seconds of video)
+                # Save each 2010 frames (67 seconds of video)
+                videoCore.frame_interval = 2010
                 videoCore.process(
                     action=saveData, showContours=False, options=options)
                 del VideoService.processes[videoPath]
 
-                if videoCore.getDurationInSeconds() == len(videoModel.by_second):
+                ret, _ = videoCore.cap.read()
+                if not ret and videoCore.keep_processing:
                     videoModel.status = 'processed'
                 else:
                     videoModel.status = 'stopped'
+                    videoCore.setFrameIndex(videoCore.getCurrentFrameIndex() - 1)
 
                 videoModel.save()
                 print(
@@ -146,3 +150,10 @@ class VideoService:
         video = Video(videoPath)
         video.setFrameIndex(frameIndex)
         return video.processFrame(options=params)
+
+    def getParticlesBySecond(videoPath: str):
+        if not VideoService.videoExistsInDB(videoPath):
+            raise Exception("Video doesn't exist")
+        model: VideoModel = VideoService.getVideoModel(videoPath)
+        by_second = [second['mode'] for second in model.by_second]
+        return by_second

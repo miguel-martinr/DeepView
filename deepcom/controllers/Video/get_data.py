@@ -20,9 +20,9 @@ def get_data(request: HttpRequest):
             'message': 'No video name provided',
         }
 
-    try:
-        unit = request.GET.get('unit')
-    except KeyError:
+    
+    unit = request.GET.get('unit')
+    if unit is None:
         unit = 'minutes'
     
     if not unit in ['seconds', 'minutes', 'hours']:

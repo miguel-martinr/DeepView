@@ -55,7 +55,7 @@ class VideoModel(models.Model):
       model_container=Second
     )
 
-    spent_time = models.TimeField(default=None)
+    spent_time = models.DurationField(null=True)
 
     objects = models.DjongoManager()
 

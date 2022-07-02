@@ -87,65 +87,68 @@ class VideoService:
         """Processes a video and returns the processed video stats.
         """
         if VideoService.videoExistsInDB(videoPath):
-            print("Video exists. Skipping process...")
+            print(f"Video processed exists in database. Removing {videoPath}...")
+            VideoModel.objects.filter(video_path=videoPath).delete()
         else:
-            print("Video does not exist. Adding it...")
-            # Create a new video model
-            videoModel = VideoModel(video_path=videoPath, by_second=[])
+            print(f"Video processed does not exist. Adding {videoPath}...")
+
+
+        # Create a new video model
+        videoModel = VideoModel(video_path=videoPath, by_second=[])
+        videoModel.save()
+
+        def getParticleData(object):
+            return {
+                'x': object['circle'][0][0],
+                'y': object['circle'][0][1],
+                'radius': object['circle'][1],
+                'area': object['area'],
+            }
+
+        videoCore = Video(videoPath)
+
+        # Get processing parameters
+        options = ParametersService.getParametersForVideo(videoPath)
+
+        def saveData(frames):
+            formatted_frames = []
+            for cur_frame in frames:
+                frame = {
+                    'particles': [getParticleData(object) for object in cur_frame],
+                }
+                formatted_frames.append(frame)
+
+            by_second = [{"mode": mode}
+                          for mode in get_particles_by_second(formatted_frames)]
+
+            videoModel.by_second.extend(by_second)
             videoModel.save()
 
-            def getParticleData(object):
-                return {
-                    'x': object['circle'][0][0],
-                    'y': object['circle'][0][1],
-                    'radius': object['circle'][1],
-                    'area': object['area'],
-                }
+        def process():
+            videoModel.status = 'processing'
+            videoModel.save()
 
-            videoCore = Video(videoPath)
+            # Save each 2010 frames (67 seconds of video)
+            videoCore.frame_interval = 2010
+            videoCore.process(
+                action=saveData, showContours=False, options=options)
+            del VideoService.processes[videoPath]
 
-            # Get processing parameters
-            options = ParametersService.getParametersForVideo(videoPath)
+            ret, _ = videoCore.cap.read()
+            if not ret and videoCore.keep_processing:
+                videoModel.status = 'processed'
+            else:
+                videoModel.status = 'stopped'
+                videoCore.setFrameIndex(
+                    videoCore.getCurrentFrameIndex() - 1)
 
-            def saveData(frames):
-                formatted_frames = []
-                for cur_frame in frames:
-                    frame = {
-                        'particles': [getParticleData(object) for object in cur_frame],
-                    }
-                    formatted_frames.append(frame)
+            videoModel.save()
+            print(
+                f"THREAD FINISHED VideoService.processes--> {VideoService.processes.__str__()}")
 
-                by_second = [{"mode": mode}
-                             for mode in get_particles_by_second(formatted_frames)]
-
-                videoModel.by_second.extend(by_second)
-                videoModel.save()
-
-            def process():
-                videoModel.status = 'processing'
-                videoModel.save()
-
-                # Save each 2010 frames (67 seconds of video)
-                videoCore.frame_interval = 2010
-                videoCore.process(
-                    action=saveData, showContours=False, options=options)
-                del VideoService.processes[videoPath]
-
-                ret, _ = videoCore.cap.read()
-                if not ret and videoCore.keep_processing:
-                    videoModel.status = 'processed'
-                else:
-                    videoModel.status = 'stopped'
-                    videoCore.setFrameIndex(
-                        videoCore.getCurrentFrameIndex() - 1)
-
-                videoModel.save()
-                print(
-                    f"THREAD FINISHED VideoService.processes--> {VideoService.processes.__str__()}")
-
-            VideoService.processes[videoPath] = videoCore
-            new_thread = threading.Thread(target=process)
-            new_thread.start()
+        VideoService.processes[videoPath] = videoCore
+        new_thread = threading.Thread(target=process)
+        new_thread.start()
 
     def processFrame(videoPath, frameIndex, params):
         video = Video(videoPath)

@@ -29,8 +29,8 @@ def check_status(request):
         response["percentage"] = percentage
       
       if (status == 'processed'):
-        spent_time = processed_video.spent_time
-        response['spent_time'] = spent_time
+        spent_seconds = processed_video.spent_time
+        response['spent_seconds'] = spent_seconds
           
 
     elif (VideoService.validateVideoFile(video_name)): 

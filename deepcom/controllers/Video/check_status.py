@@ -14,8 +14,10 @@ def check_status(request):
         
     video_path = DeepcomConfig.getVideoPath(video_name)
     
-    if (VideoModel.objects.filter(video_path=video_path)):
-      status = VideoModel.objects.get(video_path=video_path).status
+    if (VideoService.videoExistsInDB(video_path)):
+      processed_video = VideoService.getVideoModel(video_path)
+      status = processed_video.status
+
       response = {
           'success': True,
           'message': status
@@ -25,6 +27,10 @@ def check_status(request):
         video_process: Video = VideoService.processes.get(video_path)                
         percentage = int(((video_process.getCurrentFrameIndex() + 1) * 100) / video_process.numOfFrames())
         response["percentage"] = percentage
+      
+      if (status == 'processed'):
+        spent_time = processed_video.spent_time
+        response['spent_time'] = spent_time
           
 
     elif (VideoService.validateVideoFile(video_name)): 

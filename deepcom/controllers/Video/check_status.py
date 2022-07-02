@@ -25,6 +25,16 @@ def check_status(request):
 
       if (status == 'processing'):
         video_process: Video = VideoService.processes.get(video_path)                
+
+
+        if (video_process is None):
+          VideoService.deleteVideoFromDB(video_path)
+          return {
+            "success": False,
+            "message": "Video status was \"processing\" but no process was found :(. Try processing it again..."
+          }
+
+
         percentage = int(((video_process.getCurrentFrameIndex() + 1) * 100) / video_process.numOfFrames())
         response["percentage"] = percentage
       

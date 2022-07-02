@@ -184,3 +184,6 @@ class VideoService:
             group_size = 3600
 
         return [sum(segment) for segment in segment(by_second, group_size)]
+
+    def deleteVideoFromDB(videoPath: str):
+        VideoModel.objects.filter(video_path=videoPath).delete()

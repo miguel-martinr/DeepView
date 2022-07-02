@@ -1,5 +1,7 @@
 import os
 
+import pytz
+
 from deepcom.apps import DeepcomConfig
 from deepviewcore.Video import Video
 import threading
@@ -143,10 +145,11 @@ class VideoService:
                 videoCore.setFrameIndex(
                     videoCore.getCurrentFrameIndex() - 1)
 
-            now = datetime.now()
-            now = timezone('UTC').localize(now)
-            
-            videoModel.spent_time = now - videoModel.created_at
+            canaryzone = timezone('Europe/London')
+            now = canaryzone.localize(datetime.now())
+            now = now.astimezone(pytz.utc)     
+                 
+            videoModel.spent_time = (now - videoModel.created_at).total_seconds()
 
             
             videoModel.save()

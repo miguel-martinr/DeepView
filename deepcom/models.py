@@ -55,6 +55,8 @@ class VideoModel(models.Model):
       model_container=Second
     )
 
+    spent_time = models.TimeField(default=None)
+
     objects = models.DjongoManager()
 
 class ProcessingParametersModel(models.Model):  

@@ -1,0 +1,66 @@
+Exception in thread Thread-15:
+Traceback (most recent call last):
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\threading.py", line 954, in _bootstrap_inner
+    self.run()
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\threading.py", line 892, in run
+    self._target(*self._args, **self._kwargs)
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\subprocess.py", line 1475, in _readerthread
+    buffer.append(fh.read())
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\codecs.py", line 322, in decode
+    (result, consumed) = self._buffer_decode(data, self.errors, final)
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa2 in position 60: invalid start byte
+Traceback (most recent call last):
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\shutil.py", line 616, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 5] Acceso denegado: 'C:\\Users\\migue\\AppData\\Local\\Temp\\requirementslib-f842e8kv-src\\django\\.git\\objects\\pack\\pack-fec3569ae8fcea92485001feea252b90dfd27ac7.idx'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\contextmanagers.py", line 205, in spinner
+    yield _spinner
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\misc.py", line 618, in run
+    return _create_subprocess(
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\misc.py", line 542, in _create_subprocess
+    c.out, c.err = c.communicate()
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\subprocess.py", line 1130, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\subprocess.py", line 1527, in _communicate
+    stderr = stderr[0]
+IndexError: list index out of range
+
+[KError in atexit._run_exitfuncs:
+Traceback (most recent call last):
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\shutil.py", line 616, in _rmtree_unsafe
+    os.unlink(fullname)
+PermissionError: [WinError 5] Acceso denegado: 'C:\\Users\\migue\\AppData\\Local\\Temp\\requirementslib-f842e8kv-src\\django\\.git\\objects\\pack\\pack-fec3569ae8fcea92485001feea252b90dfd27ac7.idx'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\path.py", line 433, in rmtree
+    shutil.rmtree(directory, ignore_errors=ignore_errors, onerror=onerror)
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\shutil.py", line 740, in rmtree
+    return _rmtree_unsafe(path, onerror)
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\shutil.py", line 613, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\shutil.py", line 613, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\shutil.py", line 613, in _rmtree_unsafe
+    _rmtree_unsafe(fullname, onerror)
+  [Previous line repeated 1 more time]
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\shutil.py", line 618, in _rmtree_unsafe
+    onerror(os.unlink, fullname, sys.exc_info())
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\path.py", line 496, in handle_remove_readonly
+    set_write_bit(path)
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\path.py", line 383, in set_write_bit
+    c = run(
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\misc.py", line 618, in run
+    return _create_subprocess(
+  File "C:\Users\migue\AppData\Local\Programs\Python\Python39\Lib\site-packages\pipenv\vendor\vistir\misc.py", line 542, in _create_subprocess
+    c.out, c.err = c.communicate()
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\subprocess.py", line 1130, in communicate
+    stdout, stderr = self._communicate(input, endtime, timeout)
+  File "c:\users\migue\appdata\local\programs\python\python39\lib\subprocess.py", line 1527, in _communicate
+    stderr = stderr[0]
+IndexError: list index out of range

@@ -1,0 +1,9 @@
+Watching for file changes with StatReloader
+[03/Jul/2022 16:55:49] "GET / HTTP/1.1" 200 1071
+[03/Jul/2022 16:55:49] "GET /static/assets/index.28c18468.js HTTP/1.1" 304 0
+[03/Jul/2022 16:55:49] "GET /static/assets/index.578bf21f.css HTTP/1.1" 304 0
+[03/Jul/2022 16:55:52] "GET /static/assets/icons/site.webmanifest HTTP/1.1" 304 0
+[03/Jul/2022 16:55:53] "GET /deepcom/video?action=list-available HTTP/1.1" 200 32
+[03/Jul/2022 16:55:55] "GET /deepcom/video?action=list-available HTTP/1.1" 200 32
+
+Aborted!

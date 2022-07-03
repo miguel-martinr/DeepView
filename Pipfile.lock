@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f24949008dbfc50e06f2dcd2b53909ab21ec63a5299894a238f3853ff87b46ed"
+            "sha256": "c228b9607861200ac608d80247c2a226633aa7c71566ae23ba122d45bb013d6a"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -33,12 +33,8 @@
             "version": "==0.1.4"
         },
         "django": {
-            "hashes": [
-                "sha256:a523d62b7ab2908f551dabc32b99017a86aa7784e32b761708e52be3dce6d35d",
-                "sha256:dc41bf07357f1f4810c1c555b685cb51f780b41e37892d6cc92b89789f2847e1"
-            ],
-            "index": "pypi",
-            "version": "==3.1.12"
+            "git": "https://github.com/miguel-martinr/django.git",
+            "ref": "24f043c72b7180aff132c916a88558881d361630"
         },
         "django-ranged-response": {
             "hashes": [
@@ -251,6 +247,14 @@
             ],
             "version": "==0.2.4"
         },
+        "tzdata": {
+            "hashes": [
+                "sha256:238e70234214138ed7b4e8a0fab0e5e13872edab3be586ab8198c407620e2ab9",
+                "sha256:8b536a8ec63dc0751342b3984193a3118f8fca2afe25752bb9b7fffd398552d3"
+            ],
+            "markers": "sys_platform == 'win32'",
+            "version": "==2022.1"
+        },
         "whitenoise": {
             "hashes": [
                 "sha256:8e9c600a5c18bd17655ef668ad55b5edf6c24ce9bdca5bf607649ca4b1e8e2c2",
@@ -282,7 +286,7 @@
                 "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b",
                 "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==0.10.2"
         }
     }

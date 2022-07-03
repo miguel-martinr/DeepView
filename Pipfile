@@ -6,11 +6,11 @@ name = "pypi"
 [packages]
 djongo = "*"
 pymongo = "==3.12.1"
-django-ranged-response = "*"
 scipy = "*"
 whitenoise = "*"
 deepviewcore = "*"
 django = {git = "https://github.com/miguel-martinr/django.git"}
+django-cors-headers = "*"
 
 [dev-packages]
 autopep8 = "*"

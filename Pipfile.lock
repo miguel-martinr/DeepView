@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c228b9607861200ac608d80247c2a226633aa7c71566ae23ba122d45bb013d6a"
+            "sha256": "5f64f192b0a0af3e3e2aee65196b2b0535c1a1e17a179fe6584299b58ae805e6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -36,12 +36,13 @@
             "git": "https://github.com/miguel-martinr/django.git",
             "ref": "24f043c72b7180aff132c916a88558881d361630"
         },
-        "django-ranged-response": {
+        "django-cors-headers": {
             "hashes": [
-                "sha256:f71fff352a37316b9bead717fc76e4ddd6c9b99c4680cdf4783b9755af1cf985"
+                "sha256:37e42883b5f1f2295df6b4bba96eb2417a14a03270cb24b2a07f021cd4487cf4",
+                "sha256:f9dc6b4e3f611c3199700b3e5f3398c28757dcd559c2f82932687f3d0443cfdf"
             ],
             "index": "pypi",
-            "version": "==0.2.0"
+            "version": "==3.13.0"
         },
         "djongo": {
             "hashes": [

@@ -1,10 +1,5 @@
-import mimetypes
-import os
-from django.http import HttpRequest, HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
-from ranged_response import RangedFileResponse
+from django.http import HttpRequest
 from DeepView.settings import STATIC_URL
-from deepcom.apps import DeepcomConfig
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic.base import RedirectView
 from deepcom.controllers.Parameters.ParametersController import ParametersController

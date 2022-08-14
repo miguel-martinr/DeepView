@@ -8,8 +8,7 @@ import threading
 from deepcom.models import VideoModel
 from deepcom.services.ParametersService import ParametersService
 from deepcom.services.utils import get_particles_by_second, get_particles_quantity, segment
-from datetime import datetime
-from pytz import timezone
+from django.utils import timezone
 
 class VideoService:
     processes = {}
@@ -134,7 +133,9 @@ class VideoService:
             # Save each 2010 frames (67 seconds of video)
             videoCore.frame_interval = 2010
             videoCore.process(
-                action=saveData, showContours=False, options=options)
+                action=saveData, 
+                showContours=True, 
+                options=options)
             del VideoService.processes[videoPath]
 
             ret, _ = videoCore.cap.read()
@@ -145,9 +146,7 @@ class VideoService:
                 videoCore.setFrameIndex(
                     videoCore.getCurrentFrameIndex() - 1)
 
-            canaryzone = timezone('Europe/London')
-            now = canaryzone.localize(datetime.now())
-            now = now.astimezone(pytz.utc)     
+            now = timezone.now()
                  
             videoModel.spent_time = (now - videoModel.created_at).total_seconds()
 

@@ -134,7 +134,9 @@ class VideoService:
             # Save each 2010 frames (67 seconds of video)
             videoCore.frame_interval = 2010
             videoCore.process(
-                action=saveData, showContours=False, options=options)
+                action=saveData, 
+                showContours=True, 
+                options=options)
             del VideoService.processes[videoPath]
 
             ret, _ = videoCore.cap.read()

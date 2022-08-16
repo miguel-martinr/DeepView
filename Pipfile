@@ -8,13 +8,12 @@ djongo = "*"
 pymongo = "==3.12.1"
 scipy = "*"
 whitenoise = "*"
-deepviewcore = "*"
 django = {git = "https://github.com/miguel-martinr/django.git"}
 django-cors-headers = "*"
+deepviewcore = {path = "./../deepviewcore/dist/deepviewcore-0.1.4.tar.gz"}
 
 [dev-packages]
 autopep8 = "*"
 
 [requires]
 python_version = "3.9"
-

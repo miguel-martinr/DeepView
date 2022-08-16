@@ -111,8 +111,12 @@ class VideoService:
 
         # Get processing parameters
         options = ParametersService.getParametersForVideo(videoPath)
-
-        def saveData(frames):
+        
+        # Events options
+        options.update({"events": {"minArea": 100}})
+        
+        def saveData(results):
+            frames, events = results
             formatted_frames = []
             for cur_frame in frames:
                 frame = {
@@ -124,6 +128,7 @@ class VideoService:
                           for mode in get_particles_by_second(formatted_frames)]
 
             videoModel.by_second.extend(by_second)
+            print("Se han detectado " + str(len(events)) + " eventos en los segundos ", str(events.keys()))
             videoModel.save()
 
         def process():
@@ -134,7 +139,7 @@ class VideoService:
             videoCore.frame_interval = 2010
             videoCore.process(
                 action=saveData, 
-                showContours=True, 
+                showContours=False, 
                 options=options)
             del VideoService.processes[videoPath]
 

@@ -115,9 +115,7 @@ class VideoService:
 
         # Get processing parameters
         options = ParametersService.getParametersForVideo(videoPath)
-        
-        # Events options
-        options.update({"events": {"minArea": 100}})
+                
         
         def saveData(results):
             frames, events = results

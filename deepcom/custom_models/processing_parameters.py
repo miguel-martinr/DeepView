@@ -32,4 +32,10 @@ class ProcessParameters(models.Model):
     class Meta:
         abstract = True
 
+class EventsParameters(models.Model):
+    minArea = models.IntegerField()
+
+    class Meta:
+        abstract = True
+
 

@@ -3,39 +3,8 @@ from django import forms
 
 from deepcom.apps import DeepcomConfig
 
-from .custom_models.processing_parameters import PreprocessParameters, ProcessParameters
+from .custom_models.processing_parameters import EventsParameters, PreprocessParameters, ProcessParameters
 
-
-# class ParticleData(models.Model):
-#     x = models.FloatField()
-#     y = models.FloatField()
-#     radius = models.FloatField()
-#     area = models.FloatField()
-
-#     class Meta:
-#         abstract = True
-
-
-# class ParticleDataForm(forms.ModelForm):
-#     class Meta:
-#         model = ParticleData
-#         fields = ('x', 'y', 'radius', 'area')
-
-
-# class Frame(models.Model):
-#     particles = models.ArrayField(
-#         model_container=ParticleData,
-#         model_form_class=ParticleDataForm,
-#     )
-
-#     class Meta:
-#         abstract = True
-
-
-# class FrameForm(forms.ModelForm):
-#     class Meta:
-#         model = Frame
-#         fields = ('particles',)
 
 
 class Second(models.Model):
@@ -70,6 +39,12 @@ class ProcessingParametersModel(models.Model):
     model_container=ProcessParameters,
     null=False,
     default = DeepcomConfig.default_process_parameters
+  )
+
+  events = models.EmbeddedField(
+    model_container=EventsParameters,
+    null=False,
+    default = DeepcomConfig.default_events_parameters
   )
 
   video_linked = models.CharField(max_length=255, null=False, unique=True)

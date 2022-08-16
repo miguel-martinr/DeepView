@@ -13,6 +13,11 @@ class Second(models.Model):
     class Meta:
         abstract = True
 
+class EventInstant(models.Model):
+    second = models.IntegerField(null=False)
+
+    class Meta:
+        abstract = True      
 class VideoModel(models.Model):
     _id = models.ObjectIdField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -23,6 +28,11 @@ class VideoModel(models.Model):
     by_second = models.ArrayField(
       model_container=Second
     )
+
+    seconds_with_events = models.ArrayField(
+      model_container=EventInstant
+    )
+
 
     spent_time = models.FloatField(null=True)
 

@@ -96,7 +96,11 @@ class VideoService:
 
 
         # Create a new video model
-        videoModel = VideoModel(video_path=videoPath, by_second=[])
+        videoModel = VideoModel(
+          video_path=videoPath, 
+          by_second=[], 
+          seconds_with_events=[])
+          
         videoModel.save()
 
         def getParticleData(object):
@@ -128,7 +132,7 @@ class VideoService:
                           for mode in get_particles_by_second(formatted_frames)]
 
             videoModel.by_second.extend(by_second)
-            print("Se han detectado " + str(len(events)) + " eventos en los segundos ", str(events.keys()))
+            videoModel.seconds_with_events.extend([{"second": key} for key in events.keys()])            
             videoModel.save()
 
         def process():

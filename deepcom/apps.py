@@ -31,9 +31,9 @@ class DeepcomConfig(AppConfig):
     }
 
     default_events_parameters = {
-      "minArea": 2000,
+      "minArea": 200,
     }
-    
+
     default_processing_parameters = {
       "preprocess": default_preprocess_parameters,
       "process": default_process_parameters,

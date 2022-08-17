@@ -10,7 +10,7 @@ scipy = "*"
 whitenoise = "*"
 django = {git = "https://github.com/miguel-martinr/django.git"}
 django-cors-headers = "*"
-deepviewcore = {path = "./../deepviewcore/dist/deepviewcore-0.1.4.tar.gz"}
+deepviewcore = "*"
 
 [dev-packages]
 autopep8 = "*"

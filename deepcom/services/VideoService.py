@@ -1,7 +1,4 @@
 import os
-
-import pytz
-
 from deepcom.apps import DeepcomConfig
 from deepviewcore.Video import Video
 import threading

@@ -10,6 +10,7 @@ scipy = "*"
 whitenoise = "*"
 django = {git = "https://github.com/miguel-martinr/django.git"}
 django-cors-headers = "*"
+deepviewcore = "*"
 
 [dev-packages]
 autopep8 = "*"

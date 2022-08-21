@@ -43,5 +43,6 @@ def get_data(request: HttpRequest):
         }
 
     
-    response["data"] = VideoService.getParticlesByTimeUnit(video_path, unit)
+    partciles_by_time_unit = VideoService.getParticlesByTimeUnit(video_path, unit)
+    
     return response

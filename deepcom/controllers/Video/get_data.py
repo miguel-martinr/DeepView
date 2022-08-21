@@ -42,7 +42,27 @@ def get_data(request: HttpRequest):
             'message': 'Video not found',
         }
 
-    
-    partciles_by_time_unit = VideoService.getParticlesByTimeUnit(video_path, unit)
+    try:
+      partciles_by_time_unit = VideoService.getParticlesByTimeUnit(video_path, unit)
+      seconds_with_events = VideoService.getSecondsWithEvents(video_path)
+    except Exception as e:
+      return {
+        "success": False,
+        "message": str(e)
+      }
+
+    response["data"] = {
+
+      # Particles
+      "particles": {
+        "by_time_unit": partciles_by_time_unit,
+        "time_unit": unit
+      },
+      
+      # Events
+      "events": {
+        "seconds_with_events": seconds_with_events
+      }
+    }
     
     return response

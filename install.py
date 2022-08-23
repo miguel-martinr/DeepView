@@ -10,7 +10,7 @@ os.chdir(workdir)
 
 
 log_file = open("log.txt", "w")
-p = Popen(["pipenv", "install"], stderr=log_file)
+p = Popen(["poetry", "install"], stderr=log_file)
 
 p.wait()
 

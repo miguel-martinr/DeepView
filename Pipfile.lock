@@ -26,11 +26,11 @@
         },
         "deepviewcore": {
             "hashes": [
-                "sha256:2c1ab783c9134c19cf6a3c96ec11af3e5a46f36486e18af0337bc47c968ca9ca",
-                "sha256:7b15cda2fb3dead272a375524a2a55fdef1b8d15a0de99090c061eca7230a981"
+                "sha256:00679d42ba3fe346f456fb326700e9844b444776186f443a7ae48d0b5d4042b2",
+                "sha256:c265fbe3df0a79a31e816291e8d8626c048e4e76c66d9e338c0759f1a6d3b89e"
             ],
             "index": "pypi",
-            "version": "==0.1.6"
+            "version": "==0.1.7"
         },
         "django": {
             "git": "https://github.com/miguel-martinr/django.git",

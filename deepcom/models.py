@@ -2,6 +2,7 @@ from djongo import models
 from django import forms
 
 from deepcom.apps import DeepcomConfig
+from deepcom.custom_models.Events import EventModel
 
 from .custom_models.processing_parameters import EventsParameters, PreprocessParameters, ProcessParameters
 
@@ -31,6 +32,10 @@ class VideoModel(models.Model):
 
     seconds_with_events = models.ArrayField(
       model_container=EventInstant
+    )
+
+    events = models.ArrayField(
+      model_container=EventModel,          
     )
 
 

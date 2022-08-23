@@ -1,3 +1,4 @@
+from asyncio import events
 import os
 from deepcom.apps import DeepcomConfig
 from deepviewcore.Video import Video
@@ -96,7 +97,8 @@ class VideoService:
         videoModel = VideoModel(
           video_path=videoPath, 
           by_second=[], 
-          seconds_with_events=[])
+          seconds_with_events=[],
+          events=[])
           
         videoModel.save()
 
@@ -112,7 +114,15 @@ class VideoService:
 
         # Get processing parameters
         options = ParametersService.getParametersForVideo(videoPath)
-                
+
+        def formatEvent(event):
+            return {
+                'frame_index': event['frame_index'],
+                'x': event['circle'][0][0],
+                'y': event['circle'][0][1],
+                'radius': event['circle'][1],
+                'area': event['area'],
+            }
         
         def saveData(results):
             frames, events = results
@@ -127,7 +137,7 @@ class VideoService:
                           for mode in get_particles_by_second(formatted_frames)]
 
             videoModel.by_second.extend(by_second)
-            videoModel.seconds_with_events.extend([{"second": key} for key in events.keys()])            
+            videoModel.events.extend([formatEvent(event) for event in events])            
             videoModel.save()
 
         def process():

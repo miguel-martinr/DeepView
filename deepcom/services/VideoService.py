@@ -194,7 +194,14 @@ class VideoService:
         seconds_with_events = [second['second'] for second in model.seconds_with_events]
         return seconds_with_events
 
+    def getEvents(videoPath: str):
+        if not VideoService.videoExistsInDB(videoPath):
+            raise Exception(f"Couldn't get events because video <{videoPath}> doesn't exist")
 
+        model: VideoModel = VideoService.getVideoModel(videoPath)
+        events = model.events
+        return events
+        
     def getParticlesByTimeUnit(videoPath: str, unit: str):
         by_second = VideoService.getParticlesBySecond(videoPath)
         if unit == 'seconds':

@@ -43,8 +43,7 @@ def get_data(request: HttpRequest):
         }
 
     try:
-      partciles_by_time_unit = VideoService.getParticlesByTimeUnit(video_path, unit)
-      seconds_with_events = VideoService.getSecondsWithEvents(video_path)
+      partciles_by_time_unit = VideoService.getParticlesByTimeUnit(video_path, unit)      
       events = VideoService.getEvents(video_path)
 
     except Exception as e:
@@ -56,14 +55,13 @@ def get_data(request: HttpRequest):
     response["data"] = {
 
       # Particles
-      "particles": {
+      "particles_data": {
         "by_time_unit": partciles_by_time_unit,
         "time_unit": unit
       },
       
       # Events
-      "events": {
-        "seconds_with_events": seconds_with_events,
+      "events_data": {        
         "events": events,
       }
     }

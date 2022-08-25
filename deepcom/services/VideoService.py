@@ -1,7 +1,5 @@
+from asyncio import events
 import os
-
-import pytz
-
 from deepcom.apps import DeepcomConfig
 from deepviewcore.Video import Video
 import threading
@@ -96,7 +94,12 @@ class VideoService:
 
 
         # Create a new video model
-        videoModel = VideoModel(video_path=videoPath, by_second=[])
+        videoModel = VideoModel(
+          video_path=videoPath, 
+          by_second=[], 
+          seconds_with_events=[],
+          events=[])
+          
         videoModel.save()
 
         def getParticleData(object):
@@ -112,7 +115,17 @@ class VideoService:
         # Get processing parameters
         options = ParametersService.getParametersForVideo(videoPath)
 
-        def saveData(frames):
+        def formatEvent(event):
+            return {
+                'frame_index': event['frame_index'],
+                'x': event['circle'][0][0],
+                'y': event['circle'][0][1],
+                'radius': event['circle'][1],
+                'area': event['area'],
+            }
+        
+        def saveData(results):
+            frames, events = results
             formatted_frames = []
             for cur_frame in frames:
                 frame = {
@@ -124,6 +137,7 @@ class VideoService:
                           for mode in get_particles_by_second(formatted_frames)]
 
             videoModel.by_second.extend(by_second)
+            videoModel.events.extend([formatEvent(event) for event in events])            
             videoModel.save()
 
         def process():
@@ -134,7 +148,7 @@ class VideoService:
             videoCore.frame_interval = 2010
             videoCore.process(
                 action=saveData, 
-                showContours=True, 
+                showContours=False, 
                 options=options)
             del VideoService.processes[videoPath]
 
@@ -166,11 +180,25 @@ class VideoService:
 
     def getParticlesBySecond(videoPath: str):
         if not VideoService.videoExistsInDB(videoPath):
-            raise Exception("Video doesn't exist")
+            raise Exception(f"Couldn't get particles by second because <{videoPath}> video doesn't exist")
+
         model: VideoModel = VideoService.getVideoModel(videoPath)
         by_second = [second['mode'] for second in model.by_second]
         return by_second
 
+        
+        model: VideoModel = VideoService.getVideoModel(videoPath)
+        seconds_with_events = [second['second'] for second in model.seconds_with_events]
+        return seconds_with_events
+
+    def getEvents(videoPath: str):
+        if not VideoService.videoExistsInDB(videoPath):
+            raise Exception(f"Couldn't get events because video <{videoPath}> doesn't exist")
+
+        model: VideoModel = VideoService.getVideoModel(videoPath)
+        events = model.events
+        return events
+        
     def getParticlesByTimeUnit(videoPath: str, unit: str):
         by_second = VideoService.getParticlesBySecond(videoPath)
         if unit == 'seconds':

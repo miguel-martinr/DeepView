@@ -2,40 +2,10 @@ from djongo import models
 from django import forms
 
 from deepcom.apps import DeepcomConfig
+from deepcom.custom_models.Events import EventModel
 
-from .custom_models.processing_parameters import PreprocessParameters, ProcessParameters
+from .custom_models.processing_parameters import EventsParameters, PreprocessParameters, ProcessParameters
 
-
-# class ParticleData(models.Model):
-#     x = models.FloatField()
-#     y = models.FloatField()
-#     radius = models.FloatField()
-#     area = models.FloatField()
-
-#     class Meta:
-#         abstract = True
-
-
-# class ParticleDataForm(forms.ModelForm):
-#     class Meta:
-#         model = ParticleData
-#         fields = ('x', 'y', 'radius', 'area')
-
-
-# class Frame(models.Model):
-#     particles = models.ArrayField(
-#         model_container=ParticleData,
-#         model_form_class=ParticleDataForm,
-#     )
-
-#     class Meta:
-#         abstract = True
-
-
-# class FrameForm(forms.ModelForm):
-#     class Meta:
-#         model = Frame
-#         fields = ('particles',)
 
 
 class Second(models.Model):
@@ -44,6 +14,11 @@ class Second(models.Model):
     class Meta:
         abstract = True
 
+class EventInstant(models.Model):
+    second = models.IntegerField(null=False)
+
+    class Meta:
+        abstract = True      
 class VideoModel(models.Model):
     _id = models.ObjectIdField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -54,6 +29,15 @@ class VideoModel(models.Model):
     by_second = models.ArrayField(
       model_container=Second
     )
+
+    seconds_with_events = models.ArrayField(
+      model_container=EventInstant
+    )
+
+    events = models.ArrayField(
+      model_container=EventModel,          
+    )
+
 
     spent_time = models.FloatField(null=True)
 
@@ -70,6 +54,12 @@ class ProcessingParametersModel(models.Model):
     model_container=ProcessParameters,
     null=False,
     default = DeepcomConfig.default_process_parameters
+  )
+
+  events = models.EmbeddedField(
+    model_container=EventsParameters,
+    null=False,
+    default = DeepcomConfig.default_events_parameters
   )
 
   video_linked = models.CharField(max_length=255, null=False, unique=True)

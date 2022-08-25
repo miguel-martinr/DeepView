@@ -10,7 +10,8 @@ workdir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(workdir)
 
 log_file = open("run_log.txt", "w")
-p = Popen(["pipenv", "run", "python", "manage.py", "runserver"], stderr=log_file)
+p = Popen(["poetry", "run", "python", "manage.py", "runserver"], stderr=log_file)
+
 
 
 

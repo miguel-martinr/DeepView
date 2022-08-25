@@ -92,10 +92,16 @@ class ParametersService:
             process['threshold'] = DeepcomConfig.default_threshold_parameters        
 
 
+        # Events
+        events = partial_parameters.get("events")
+        if events is None:
+            events = DeepcomConfig.default_events_parameters
+
 
         return {
           "preprocess": preprocess,
           "process": process,
+          "events": events
         }
 
 

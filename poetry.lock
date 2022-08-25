@@ -31,7 +31,7 @@ python-versions = "*"
 
 [[package]]
 name = "deepviewcore"
-version = "0.1.7"
+version = "0.1.8"
 description = "Underwater images processing package made for DeepView project (University of La Laguna - Spain)"
 category = "main"
 optional = false
@@ -192,7 +192,7 @@ brotli = ["brotli"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "ae0b2fda0f4da90b57300a11eaa229a4adc664a133c048920bb1c597f548b2ff"
+content-hash = "684295e5784f899fbcb8acdacd3f7f20e654752474f7449b59b830d2f5ecc809"
 
 [metadata.files]
 asgiref = []

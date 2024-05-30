@@ -25,14 +25,14 @@ def summarize(values, segments_size):
 def get_particles_by_second(frames: list):
   particles_per_frame = [len(frame['particles']) for frame in frames]
   segments_30frames = segment(particles_per_frame, 30)
+  return [int(stats.mode(segment)[0]) for segment in segments_30frames]    
 
-  return [int(stats.mode(segment)[0]) for segment in segments_30frames]
 
 def get_particles_quantity(frames: list, unit='seconds'):
 
     particles_per_frame = [len(frame['particles']) for frame in frames]
 
-    by_second = summarize(particles_per_frame, 30)
+    by_second = summarize(particles_per_frame, 60)
 
     if unit == 'seconds': return by_second
 
@@ -43,3 +43,5 @@ def get_particles_quantity(frames: list, unit='seconds'):
     else:
       by_hour = summarize(by_second, 3600)
       return by_hour
+
+

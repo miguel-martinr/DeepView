@@ -16,7 +16,10 @@ django-cors-headers = "*"
 deepviewcore = "0.1.8"
 
 [tool.poetry.dev-dependencies]
-autopep8 = "*"
+autopep8 = "*"  
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.29.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

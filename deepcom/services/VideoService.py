@@ -36,7 +36,7 @@ class VideoService:
 
         return VideoModel.objects.get(video_path=path)
 
-    def validateVideoFile(filename):
+    def validateVideoFile(filename: str):
         videos_path = DeepcomConfig.videos_path
         return os.path.isfile(os.path.join(videos_path, filename)) and \
             filename.endswith(DeepcomConfig.allowed_extensions)

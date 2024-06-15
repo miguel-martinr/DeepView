@@ -104,6 +104,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'deepview-db',
+        'CLIENT': {
+            'host': 'db',
+            'port': 27017,
+        }
+
     }
 }
 

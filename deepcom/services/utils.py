@@ -22,17 +22,17 @@ def summarize(values, segments_size):
     return by_unit
 
 
-def get_particles_by_second(frames: list):
+def get_particles_by_second(frames: list, fps: int):
   particles_per_frame = [len(frame['particles']) for frame in frames]
-  segments_30frames = segment(particles_per_frame, 30)
+  segments_fps_frames = segment(particles_per_frame, fps)
 
-  return [int(stats.mode(segment)[0]) for segment in segments_30frames]
+  return [int(stats.mode(segment)[0]) for segment in segments_fps_frames]
 
-def get_particles_quantity(frames: list, unit='seconds'):
+def get_particles_quantity(frames: list, fps: int, unit='seconds'):
 
     particles_per_frame = [len(frame['particles']) for frame in frames]
 
-    by_second = summarize(particles_per_frame, 30)
+    by_second = summarize(particles_per_frame, fps)
 
     if unit == 'seconds': return by_second
 

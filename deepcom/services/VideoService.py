@@ -5,7 +5,7 @@ from deepviewcore.Video import Video
 import threading
 from deepcom.models import VideoModel
 from deepcom.services.ParametersService import ParametersService
-from deepcom.services.utils import get_particles_by_second, get_particles_quantity, segment
+from deepcom.services.utils import get_particles_by_second, segment
 from django.utils import timezone
 
 class VideoService:
@@ -126,7 +126,7 @@ class VideoService:
         
         def saveData(results):
             frames, events = results
-            formatted_frames = []
+            formatted_frames = [] 
             for cur_frame in frames:
                 frame = {
                     'particles': [getParticleData(object) for object in cur_frame],
@@ -134,7 +134,7 @@ class VideoService:
                 formatted_frames.append(frame)
 
             by_second = [{"mode": mode}
-                          for mode in get_particles_by_second(formatted_frames)]
+                          for mode in get_particles_by_second(formatted_frames, int(videoCore.getFrameRate()))]
 
             videoModel.by_second.extend(by_second)
             videoModel.events.extend([formatEvent(event) for event in events])            

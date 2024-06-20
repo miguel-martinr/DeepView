@@ -33,7 +33,7 @@ class VideoController:
         elif request.method == 'GET':
             response = VideoController.handleGetRequest(request)
         else:
-            return HttpResponse(status=400)
+            return HttpResponse(status=405) # Method not allowed
 
         return HttpResponse(json.dumps(response), content_type='application/json')
 

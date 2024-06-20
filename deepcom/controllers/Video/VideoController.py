@@ -55,8 +55,7 @@ class VideoController:
 
         action = body['action']
         payload = body['payload']
-
-        # print("##################", action, payload)
+        
         response = VideoController.post(action, payload)
         return response
 

@@ -17,7 +17,7 @@ docker-cd:
 
     - name: Checkout code
       uses: actions/checkout@v2
-
+      
     - name: Get short SHA
       run: |
         echo "Getting short SHA..."

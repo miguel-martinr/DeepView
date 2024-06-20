@@ -14,7 +14,7 @@ def check_status(request):
         
     video_path = DeepcomConfig.getVideoPath(video_name)
     
-    if (VideoService.videoExistsInDB(video_path)):
+    if (VideoService.video_exists_in_DB(video_path)):
       processed_video = VideoService.getVideoModel(video_path)
       status = processed_video.status
 

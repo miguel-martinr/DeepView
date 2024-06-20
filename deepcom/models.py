@@ -38,6 +38,8 @@ class VideoModel(models.Model):
       model_container=EventModel,          
     )
 
+    frame_rate = models.FloatField(null=True)
+
 
     spent_time = models.FloatField(null=True)
 

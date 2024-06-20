@@ -11,7 +11,7 @@ def stop_processing(video_name):
             "success": True,
             "message": "Video processing stopped"
         }
-    elif (VideoService.videoExistsInDB(video_path)):
+    elif (VideoService.video_exists_in_DB(video_path)):
       model: VideoModel = VideoService.getVideoModel(video_path)
       status = model.status
       

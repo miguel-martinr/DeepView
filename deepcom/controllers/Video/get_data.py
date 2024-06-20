@@ -34,7 +34,7 @@ def get_data(request: HttpRequest):
     }
 
     video_path = DeepcomConfig.getVideoPath(video_name)
-    if not VideoService.videoExistsInDB(video_path):
+    if not VideoService.video_exists_in_DB(video_path):
         return {
             'success': False,
             'message': 'Video not found',

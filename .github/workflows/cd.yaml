@@ -15,6 +15,9 @@ docker-cd:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Get short SHA
       run: |
         echo "Getting short SHA..."

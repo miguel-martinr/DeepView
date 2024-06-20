@@ -43,7 +43,7 @@ def check_status(request):
         response['spent_seconds'] = spent_seconds
           
 
-    elif (VideoService.validateVideoFile(video_name)): 
+    elif (VideoService.validate_video_file(video_name)): 
       response = {
           'success': True,
           'message': 'unprocessed'

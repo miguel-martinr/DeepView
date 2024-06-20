@@ -36,12 +36,12 @@ class VideoService:
 
         return VideoModel.objects.get(video_path=path)
 
-    def validateVideoFile(filename: str):
+    def validate_video_file(filename: str):
         videos_path = DeepcomConfig.videos_path
         return os.path.isfile(os.path.join(videos_path, filename)) and \
             filename.lower().endswith(DeepcomConfig.allowed_extensions)
 
-    def getAvailableVideos():
+    def get_available_videos_in_folder():
         """Gets available data from videos. It will search for videos in 
         the videos folder and also for processed data in the database.
 
@@ -64,7 +64,7 @@ class VideoService:
 
         # Videos from the videos folder
         for filename in os.listdir(DeepcomConfig.videos_path):
-            if VideoService.validateVideoFile(filename):
+            if VideoService.validate_video_file(filename):
                 videos_names.append(filename)
 
         videos_stats = []
@@ -83,6 +83,27 @@ class VideoService:
             # current_stats['status'] = 'UNPROCESSED'
             videos_stats.append(current_stats)
         return videos_stats
+
+    def get_all_available_video_data():
+        videos_in_folder = VideoService.get_available_videos_in_folder()
+        videos_in_db = VideoModel.objects.all()
+
+        videos_in_db_only = [
+            video for video in videos_in_db if not os.path.basename(video.video_path) in [video['name'] for video in videos_in_folder]
+        ]
+
+        videos_in_db_response = [
+            {
+                'name': os.path.basename(video.video_path),
+                'status': video.status,
+            }
+
+            for video in videos_in_db_only
+        ]
+
+        return videos_in_folder + videos_in_db_response
+
+
 
     def stopProcessing(videoPath):
         if videoPath in VideoService.processes:

@@ -39,20 +39,30 @@ class VideoService:
     def validateVideoFile(filename: str):
         videos_path = DeepcomConfig.videos_path
         return os.path.isfile(os.path.join(videos_path, filename)) and \
-            filename.endswith(DeepcomConfig.allowed_extensions)
+            filename.lower().endswith(DeepcomConfig.allowed_extensions)
 
     def getAvailableVideos():
-        """Gets available videos stats from the videos folder.
-        Each video stats is a dictionary with the following keys:
+        """Gets available data from videos. It will search for videos in 
+        the videos folder and also for processed data in the database.
+
+        For that data in the database without a corresponding video file, 
+        some features will be disabled: 
+          - Frame processor
+          - Video player
+          - Event list
+
+        For those videos present in the videos folder, dictionaries with the 
+        data will be used. Each video stats is a dictionary with the following keys:
          - name: video name
          - size_in_MB: video size in MB
          - duration_in_seconds: video duration in seconds
          - fps: video frames per second
          - status: video status. (processing, processed, stopped, unprocessed)
-
         """
 
         videos_names = []
+
+        # Videos from the videos folder
         for filename in os.listdir(DeepcomConfig.videos_path):
             if VideoService.validateVideoFile(filename):
                 videos_names.append(filename)

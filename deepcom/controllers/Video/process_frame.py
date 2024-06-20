@@ -36,7 +36,7 @@ def process_frame(payload):
 
     
 
-  if (not VideoService.validateVideoFile(video_name)):
+  if (not VideoService.validate_video_file(video_name)):
     return {
       "success": False,
       "message": "Video not found",

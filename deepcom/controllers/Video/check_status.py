@@ -14,7 +14,7 @@ def check_status(request):
         
     video_path = DeepcomConfig.getVideoPath(video_name)
     
-    if (VideoService.videoExistsInDB(video_path)):
+    if (VideoService.video_exists_in_DB(video_path)):
       processed_video = VideoService.getVideoModel(video_path)
       status = processed_video.status
 
@@ -43,7 +43,7 @@ def check_status(request):
         response['spent_seconds'] = spent_seconds
           
 
-    elif (VideoService.validateVideoFile(video_name)): 
+    elif (VideoService.validate_video_file(video_name)): 
       response = {
           'success': True,
           'message': 'unprocessed'

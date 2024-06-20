@@ -15,7 +15,7 @@ class VideoService:
     def __init__(self):
         pass
 
-    def videoExistsInDB(videoPath=None, videoName=None):
+    def video_exists_in_DB(videoPath=None, videoName=None):
         if videoPath is not None:
             path = videoPath
         elif videoName is not None:
@@ -36,25 +36,35 @@ class VideoService:
 
         return VideoModel.objects.get(video_path=path)
 
-    def validateVideoFile(filename: str):
+    def validate_video_file(filename: str):
         videos_path = DeepcomConfig.videos_path
         return os.path.isfile(os.path.join(videos_path, filename)) and \
-            filename.endswith(DeepcomConfig.allowed_extensions)
+            filename.lower().endswith(DeepcomConfig.allowed_extensions)
 
-    def getAvailableVideos():
-        """Gets available videos stats from the videos folder.
-        Each video stats is a dictionary with the following keys:
+    def get_available_videos_in_folder():
+        """Gets available data from videos. It will search for videos in 
+        the videos folder and also for processed data in the database.
+
+        For that data in the database without a corresponding video file, 
+        some features will be disabled: 
+          - Frame processor
+          - Video player
+          - Event list
+
+        For those videos present in the videos folder, dictionaries with the 
+        data will be used. Each video stats is a dictionary with the following keys:
          - name: video name
          - size_in_MB: video size in MB
          - duration_in_seconds: video duration in seconds
          - fps: video frames per second
          - status: video status. (processing, processed, stopped, unprocessed)
-
         """
 
         videos_names = []
+
+        # Videos from the videos folder
         for filename in os.listdir(DeepcomConfig.videos_path):
-            if VideoService.validateVideoFile(filename):
+            if VideoService.validate_video_file(filename):
                 videos_names.append(filename)
 
         videos_stats = []
@@ -74,6 +84,29 @@ class VideoService:
             videos_stats.append(current_stats)
         return videos_stats
 
+    def get_all_available_video_data():
+        videos_in_folder = VideoService.get_available_videos_in_folder()
+        videos_in_db = VideoModel.objects.all()
+
+        videos_in_db_only = [
+            video for video in videos_in_db if not os.path.basename(video.video_path) in [video['name'] for video in videos_in_folder]
+        ]
+
+        videos_in_db_response = [
+            {
+                'name': os.path.basename(video.video_path),
+                'status': video.status,
+                'fps': video.frame_rate,
+                'video_missing': True,
+            }
+
+            for video in videos_in_db_only
+        ]
+
+        return videos_in_folder + videos_in_db_response
+
+
+
     def stopProcessing(videoPath):
         if videoPath in VideoService.processes:
             with VideoService.lock:
@@ -83,24 +116,27 @@ class VideoService:
         else:
             return False
 
-    def processVideo(videoPath):
+    def processVideo(video_path):
         """Processes a video and returns the processed video stats.
         """
-        if VideoService.videoExistsInDB(videoPath):
-            print(f"Video processed exists in database. Removing {videoPath}...")
-            VideoModel.objects.filter(video_path=videoPath).delete()
+        if VideoService.video_exists_in_DB(video_path):
+            print(f"Video processed exists in database. Removing {video_path}...")
+            VideoModel.objects.filter(video_path=video_path).delete()
         else:
-            print(f"Video processed does not exist. Adding {videoPath}...")
-
+            print(f"Video processed does not exist. Adding {video_path}...")
+      
+        core_video = Video(video_path)
+        video_stats = core_video.getStats()
 
         # Create a new video model
-        videoModel = VideoModel(
-          video_path=videoPath, 
+        model_video = VideoModel(
+          video_path=video_path, 
           by_second=[], 
           seconds_with_events=[],
-          events=[])
+          events=[],
+          frame_rate=core_video.getFrameRate())
           
-        videoModel.save()
+        model_video.save()
 
         def getParticleData(object):
             return {
@@ -110,10 +146,10 @@ class VideoService:
                 'area': object['area'],
             }
 
-        videoCore = Video(videoPath)
+        
 
         # Get processing parameters
-        options = ParametersService.getParametersForVideo(videoPath)
+        options = ParametersService.getParametersForVideo(video_path)
 
         def formatEvent(event):
             return {
@@ -134,42 +170,42 @@ class VideoService:
                 formatted_frames.append(frame)
 
             by_second = [{"mode": mode}
-                          for mode in get_particles_by_second(formatted_frames, int(videoCore.getFrameRate()))]
+                          for mode in get_particles_by_second(formatted_frames, int(core_video.getFrameRate()))]
 
-            videoModel.by_second.extend(by_second)
-            videoModel.events.extend([formatEvent(event) for event in events])            
-            videoModel.save()
+            model_video.by_second.extend(by_second)
+            model_video.events.extend([formatEvent(event) for event in events])            
+            model_video.save()
 
         def process():
-            videoModel.status = 'processing'
-            videoModel.save()
+            model_video.status = 'processing'
+            model_video.save()
 
             # Save each 2010 frames (67 seconds of video)
-            videoCore.frame_interval = 2010
-            videoCore.process(
+            core_video.frame_interval = 2010
+            core_video.process(
                 action=saveData, 
                 showContours=False, 
                 options=options)
-            del VideoService.processes[videoPath]
+            del VideoService.processes[video_path]
 
-            ret, _ = videoCore.cap.read()
-            if not ret and videoCore.keep_processing:
-                videoModel.status = 'processed'
+            ret, _ = core_video.cap.read()
+            if not ret and core_video.keep_processing:
+                model_video.status = 'processed'
             else:
-                videoModel.status = 'stopped'
-                videoCore.setFrameIndex(
-                    videoCore.getCurrentFrameIndex() - 1)
+                model_video.status = 'stopped'
+                core_video.setFrameIndex(
+                    core_video.getCurrentFrameIndex() - 1)
 
             now = timezone.now()
                  
-            videoModel.spent_time = (now - videoModel.created_at).total_seconds()
+            model_video.spent_time = (now - model_video.created_at).total_seconds()
 
             
-            videoModel.save()
+            model_video.save()
             print(
                 f"THREAD FINISHED VideoService.processes--> {VideoService.processes.__str__()}")
 
-        VideoService.processes[videoPath] = videoCore
+        VideoService.processes[video_path] = core_video
         new_thread = threading.Thread(target=process)
         new_thread.start()
 
@@ -179,20 +215,15 @@ class VideoService:
         return video.processFrame(options=params)
 
     def getParticlesBySecond(videoPath: str):
-        if not VideoService.videoExistsInDB(videoPath):
+        if not VideoService.video_exists_in_DB(videoPath):
             raise Exception(f"Couldn't get particles by second because <{videoPath}> video doesn't exist")
 
         model: VideoModel = VideoService.getVideoModel(videoPath)
         by_second = [second['mode'] for second in model.by_second]
         return by_second
 
-        
-        model: VideoModel = VideoService.getVideoModel(videoPath)
-        seconds_with_events = [second['second'] for second in model.seconds_with_events]
-        return seconds_with_events
-
     def getEvents(videoPath: str):
-        if not VideoService.videoExistsInDB(videoPath):
+        if not VideoService.video_exists_in_DB(videoPath):
             raise Exception(f"Couldn't get events because video <{videoPath}> doesn't exist")
 
         model: VideoModel = VideoService.getVideoModel(videoPath)
